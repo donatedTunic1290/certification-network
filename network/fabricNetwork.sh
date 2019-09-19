@@ -158,12 +158,12 @@ function bootstrapRetry() {
 
 function updateChaincode() {
   checkPrereqs
-  docker exec cli scripts/updateChaincode.sh "$CHANNEL_NAME" "$CLI_DELAY" "$LANGUAGE" "$VERSION_NO"
+  docker exec cli scripts/updateChaincode.sh "$CHANNEL_NAME" "$CLI_DELAY" "$LANGUAGE" "$VERSION_NO" "$TYPE"
 }
 
 function installChaincode() {
   checkPrereqs
-  docker exec cli scripts/installChaincode.sh "$CHANNEL_NAME" "$CLI_DELAY" "$LANGUAGE" "$VERSION_NO"
+  docker exec cli scripts/installChaincode.sh "$CHANNEL_NAME" "$CLI_DELAY" "$LANGUAGE" "$VERSION_NO" "$TYPE"
 }
 
 # Tear down running network
@@ -336,6 +336,8 @@ CLI_DELAY=5
 CHANNEL_NAME="certificationchannel"
 # version for updating chaincode
 VERSION_NO=1.1
+# type of chaincode to be installed
+TYPE="basic"
 # use this as the default docker-compose yaml definition
 COMPOSE_FILE=docker-compose.yml
 # use node as the default language for chaincode
@@ -368,7 +370,7 @@ else
   exit 1
 fi
 
-while getopts "h?c:t:d:f:l:i:v:" opt; do
+while getopts "h?c:t:d:f:l:i:v:m:" opt; do
   case "$opt" in
   h | \?)
     printHelp
@@ -391,6 +393,9 @@ while getopts "h?c:t:d:f:l:i:v:" opt; do
     ;;
   v)
     VERSION_NO=$OPTARG
+    ;;
+  m)
+    TYPE=$OPTARG
     ;;
   i)
     IMAGETAG=$(go env GOARCH)"-"$OPTARG

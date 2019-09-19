@@ -1,2 +1,4 @@
 # Project exclude paths
 /chaincode/node_modules/
+.gitignore
+.idea/
