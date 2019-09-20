@@ -21,10 +21,10 @@ services:
       - FABRIC_CA_SERVER_CA_NAME=ca.iit.certification-network.com
       - FABRIC_CA_SERVER_TLS_ENABLED=false
       - FABRIC_CA_SERVER_TLS_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.iit.certification-network.com-cert.pem
-      - FABRIC_CA_SERVER_TLS_KEYFILE=/etc/hyperledger/fabric-ca-server-config/fa88bf1489d07ab4b0c48b59c2d8e014a4840a05c06add57760663b47032d169_sk
+      - FABRIC_CA_SERVER_TLS_KEYFILE=/etc/hyperledger/fabric-ca-server-config/5331fd1427e8aa636d567627e532e3aeab9cd4200a1057e17fdad6974dd2cf72_sk
     ports:
       - "7054:7054"
-    command: sh -c 'fabric-ca-server start --ca.certfile /etc/hyperledger/fabric-ca-server-config/ca.iit.certification-network.com-cert.pem --ca.keyfile /etc/hyperledger/fabric-ca-server-config/fa88bf1489d07ab4b0c48b59c2d8e014a4840a05c06add57760663b47032d169_sk -b admin:adminpw -d'
+    command: sh -c 'fabric-ca-server start --ca.certfile /etc/hyperledger/fabric-ca-server-config/ca.iit.certification-network.com-cert.pem --ca.keyfile /etc/hyperledger/fabric-ca-server-config/5331fd1427e8aa636d567627e532e3aeab9cd4200a1057e17fdad6974dd2cf72_sk -b admin:adminpw -d'
     volumes:
       - ./crypto-config/peerOrganizations/iit.certification-network.com/ca/:/etc/hyperledger/fabric-ca-server-config
     container_name: ca.iit.certification-network.com
@@ -38,10 +38,10 @@ services:
       - FABRIC_CA_SERVER_CA_NAME=ca.mhrd.certification-network.com
       - FABRIC_CA_SERVER_TLS_ENABLED=false
       - FABRIC_CA_SERVER_TLS_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.mhrd.certification-network.com-cert.pem
-      - FABRIC_CA_SERVER_TLS_KEYFILE=/etc/hyperledger/fabric-ca-server-config/b681bbb7da5776eb14888aaecdfb51170130318e1328a78f2d5cad4ddc2602d2_sk
+      - FABRIC_CA_SERVER_TLS_KEYFILE=/etc/hyperledger/fabric-ca-server-config/82452b495afcac428e3584d9f62892cdd50a781a2b25957ef2a8982d65a57ec9_sk
     ports:
       - "8054:7054"
-    command: sh -c 'fabric-ca-server start --ca.certfile /etc/hyperledger/fabric-ca-server-config/ca.mhrd.certification-network.com-cert.pem --ca.keyfile /etc/hyperledger/fabric-ca-server-config/b681bbb7da5776eb14888aaecdfb51170130318e1328a78f2d5cad4ddc2602d2_sk -b admin:adminpw -d'
+    command: sh -c 'fabric-ca-server start --ca.certfile /etc/hyperledger/fabric-ca-server-config/ca.mhrd.certification-network.com-cert.pem --ca.keyfile /etc/hyperledger/fabric-ca-server-config/82452b495afcac428e3584d9f62892cdd50a781a2b25957ef2a8982d65a57ec9_sk -b admin:adminpw -d'
     volumes:
       - ./crypto-config/peerOrganizations/mhrd.certification-network.com/ca/:/etc/hyperledger/fabric-ca-server-config
     container_name: ca.mhrd.certification-network.com
@@ -55,10 +55,10 @@ services:
       - FABRIC_CA_SERVER_CA_NAME=ca.upgrad.certification-network.com
       - FABRIC_CA_SERVER_TLS_ENABLED=false
       - FABRIC_CA_SERVER_TLS_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.upgrad.certification-network.com-cert.pem
-      - FABRIC_CA_SERVER_TLS_KEYFILE=/etc/hyperledger/fabric-ca-server-config/73d257c07a5d68006ecedb865f22530322718d6a4f55bdf1c9c63e5a463d99c4_sk
+      - FABRIC_CA_SERVER_TLS_KEYFILE=/etc/hyperledger/fabric-ca-server-config/b9a029e3c3839e368d17929fa90433f1b4ca7411f6bff801eea105d4e51e8a83_sk
     ports:
       - "9054:7054"
-    command: sh -c 'fabric-ca-server start --ca.certfile /etc/hyperledger/fabric-ca-server-config/ca.upgrad.certification-network.com-cert.pem --ca.keyfile /etc/hyperledger/fabric-ca-server-config/73d257c07a5d68006ecedb865f22530322718d6a4f55bdf1c9c63e5a463d99c4_sk -b admin:adminpw -d'
+    command: sh -c 'fabric-ca-server start --ca.certfile /etc/hyperledger/fabric-ca-server-config/ca.upgrad.certification-network.com-cert.pem --ca.keyfile /etc/hyperledger/fabric-ca-server-config/b9a029e3c3839e368d17929fa90433f1b4ca7411f6bff801eea105d4e51e8a83_sk -b admin:adminpw -d'
     volumes:
       - ./crypto-config/peerOrganizations/upgrad.certification-network.com/ca/:/etc/hyperledger/fabric-ca-server-config
     container_name: ca.upgrad.certification-network.com

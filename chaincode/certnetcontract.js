@@ -42,7 +42,6 @@ class CertnetContract extends Contract {
 		// Convert the JSON object to a buffer and send it to blockchain for storage
 		let dataBuffer = Buffer.from(JSON.stringify(newStudentObject));
 		await ctx.stub.putState(studentKey, dataBuffer);
-		console.log(newStudentObject);
 		// Return value of new student account created to user
 		return newStudentObject;
 	}
@@ -51,7 +50,7 @@ class CertnetContract extends Contract {
 	 * Get a student account's details from the blockchain
 	 * @param ctx - The transaction context
 	 * @param studentId - Student ID for which to fetch details
-	 * @returns {Promise<Buffer|void>}
+	 * @returns
 	 */
 	async getStudent(ctx, studentId) {
 		// Create the composite key required to fetch record from blockchain
@@ -61,8 +60,7 @@ class CertnetContract extends Contract {
 		let studentBuffer = await ctx.stub
 				.getState(studentKey)
 				.catch(err => console.log(err));
-		console.log(studentBuffer.toString());
-		return studentBuffer;
+		return JSON.parse(studentBuffer.toString());
 	}
 	
 }
