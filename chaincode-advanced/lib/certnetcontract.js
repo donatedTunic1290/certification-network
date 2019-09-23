@@ -37,23 +37,23 @@ class CertnetContract extends Contract {
 		console.log('Certnet Smart Contract Instantiated');
 	}
 	
+	
 	/**
 	 * Create a new student account on the network
 	 * @param ctx
 	 * @param studentId
 	 * @param name
 	 * @param email
-	 * @param grade
-	 * @returns {Promise<Buffer>}
+	 * @returns {Object}
 	 */
-	async createStudent(ctx, studentId, name, email, grade) {
+	async createStudent(ctx, studentId, name, email) {
 		let msgSender = ctx.clientIdentity.getID();
 		let studentKey = Student.makeKey([studentId]);
 		
 		// Fetch student with given ID from blockchain
 		let student = await ctx.studentList
 				.getStudent(studentKey)
-				.catch(err => console.log(err));
+				.catch(err => console.log('Provided studentId is unique!'));
 		
 		// Make sure student does not already exist.
 		if (student !== undefined) {
@@ -63,39 +63,56 @@ class CertnetContract extends Contract {
 				studentId: studentId,
 				name: name,
 				email: email,
-				grade: grade,
-				owner: msgSender,
+				school: msgSender,
 				createdAt: new Date(),
 				updatedAt: new Date(),
 			};
 			// Create a new instance of student model and save it to blockchain
-			let newStudent = Student.createInstance(studentObject);
-			newStudent.setCurrentState('CREATED');
-			await ctx.studentList.addStudent(newStudent);
+			let newStudentObject = Student.createInstance(studentObject);
+			newStudentObject.setCurrentState('CREATED');
+			await ctx.studentList.addStudent(newStudentObject);
 			// Return value of new student account created
-			return newStudent.toBuffer();
+			return newStudentObject;
 		}
 	}
+	
+	
+	/**
+	 * Get a student account's details from the blockchain
+	 * @param ctx - The transaction context
+	 * @param studentId - Student ID for which to fetch details
+	 * @returns {Object}
+	 */
+	async getStudent(ctx, studentId) {
+		// Create the composite key required to fetch record from blockchain
+		const studentKey = Student.makeKey([studentId]);
+		
+		// Return value of student account from blockchain
+		return await ctx.studentList
+				.getStudent(studentKey)
+				.catch(err => console.log(err));
+	}
+	
 	
 	/**
 	 * Issue a certificate to the student after completing the course
 	 * @param ctx
 	 * @param studentId
 	 * @param courseId
-	 * @param certId
+	 * @param gradeReceived
 	 * @param originalHash
-	 * @param grade
-	 * @returns {Promise<Buffer>}
+	 * @returns {Object}
 	 */
-	async issueCertificate(ctx, studentId, courseId, certId, originalHash, grade) {
+	async issueCertificate(ctx, studentId, courseId, gradeReceived, originalHash) {
 		let msgSender = ctx.clientIdentity.getID();
-		let certificateKey = Certificate.makeKey([certId]);
+		let certificateKey = Certificate.makeKey([courseId + '-' + studentId]);
 		let studentKey = Student.makeKey([studentId]);
 		
 		// Fetch student with given ID from blockchain
 		let student = await ctx.studentList
 				.getStudent(studentKey)
 				.catch(err => console.log(err));
+		
 		// Fetch certificate with given ID from blockchain
 		let certificate = await ctx.certificateList
 				.getCertificate(certificateKey)
@@ -103,36 +120,38 @@ class CertnetContract extends Contract {
 		
 		// Make sure that student already exists and certificate with given ID does not exist.
 		if (student === undefined || certificate !== undefined) {
-			throw new Error('Invalid Student ID: ' + studentId + ' or Certificate ID: ' + certId + '. Either student does not exist or certificate already exists.');
+			throw new Error('Invalid Student ID: ' + studentId + ' or Course ID: ' + courseId + '. Either student does not exist or certificate already exists.');
 		} else {
 			let certificateObject = {
 				studentId: studentId,
 				courseId: courseId,
 				teacher: msgSender,
-				certId: certId,
+				certId: courseId + '-' + studentId,
 				originalHash: originalHash,
-				grade: grade,
+				grade: gradeReceived,
 				createdAt: new Date(),
 				updatedAt: new Date(),
 			};
 			// Create a new instance of certificate model and save it to blockchain
-			let newCertificate = Certificate.createInstance(certificateObject);
-			newCertificate.setCurrentState('CREATED');
-			await ctx.certificateList.addCertificate(newCertificate);
+			let newCertificateObject = Certificate.createInstance(certificateObject);
+			newCertificateObject.setCurrentState('CREATED');
+			await ctx.certificateList.addCertificate(newCertificateObject);
 			// Return value of new certificate issued to student
-			return newCertificate.toBuffer();
+			return newCertificateObject;
 		}
 	}
+	
 	
 	/**
 	 *
 	 * @param ctx
-	 * @param certId
+	 * @param studentId
+	 * @param courseId
 	 * @param currentHash
-	 * @returns {Promise<string>}
+	 * @returns {String}
 	 */
-	async verifyCertificate(ctx, certId, currentHash) {
-		let certificateKey = Certificate.makeKey([certId]);
+	async verifyCertificate(ctx, studentId, courseId, currentHash) {
+		let certificateKey = Certificate.makeKey([courseId + '-' + studentId]);
 		
 		// Fetch certificate with given ID from blockchain
 		let certificate = await ctx.certificateList
