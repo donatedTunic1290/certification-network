@@ -148,9 +148,10 @@ class CertnetContract extends Contract {
 	 * @param studentId
 	 * @param courseId
 	 * @param currentHash
-	 * @returns {String}
+	 * @returns {Object}
 	 */
 	async verifyCertificate(ctx, studentId, courseId, currentHash) {
+		let verifier = ctx.clientIdentity.getID();
 		let certificateKey = Certificate.makeKey([courseId + '-' + studentId]);
 		
 		// Fetch certificate with given ID from blockchain
@@ -160,7 +161,15 @@ class CertnetContract extends Contract {
 		
 		// Check validity of certificate
 		if (certificate === undefined || certificate.originalHash !== currentHash) {
-			return "INVALID CERTIFICATE!";
+			let verificationResult = {
+				certificate: courseId + '-' + studentId,
+				student: studentId,
+				verifier: verifier,
+				result: 'xxx - INVALID',
+				verifiedOn: new Date()
+			};
+			ctx.stub.setEvent('verifyCertificate', Buffer.from(JSON.stringify(verificationResult)));
+			return verificationResult;
 		} else {
 			return "VALID CERTIFICATE!";
 		}

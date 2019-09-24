@@ -28,7 +28,7 @@ async function main() {
 		const credentialPath = path.join(crypto_materials, '/peerOrganizations/iit.certification-network.com/users/Admin@iit.certification-network.com');
 		const certificate = fs.readFileSync(path.join(credentialPath, '/msp/signcerts/Admin@iit.certification-network.com-cert.pem')).toString();
 		// IMPORTANT: Change the private key name to the key generated on your computer
-		const privatekey = fs.readFileSync(path.join(credentialPath, '/msp/keystore/afeb899edf89629d8915f7b39f758c8bbb0ff57b9452e0a7d35f53b40112b76f_sk')).toString();
+		const privatekey = fs.readFileSync(path.join(credentialPath, '/msp/keystore/910347e27c5fb2be66d9346df12a93e5b2136bf8950a9d67421c7bce0997c98f_sk')).toString();
 		
 		// Load credentials into wallet
 		const identityLabel = 'IIT_ADMIN';
