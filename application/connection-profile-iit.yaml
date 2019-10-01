@@ -13,7 +13,7 @@ description: "Certification Network"
 version: "1.0"
 
 client:
-  organization: iit
+  organization: mhrd
   connection:
     timeout:
       peer:
@@ -28,20 +28,20 @@ channels:
       - orderer.certification-network.com
     peers:
       peer0.iit.certification-network.com:
-        endorsingPeer: true
-        chaincodeQuery: true
+        endorsingPeer: false
+        chaincodeQuery: false
         ledgerQuery: true
-        eventSource: true
+        eventSource: false
       peer1.iit.certification-network.com:
         endorsingPeer: false
         chaincodeQuery: false
         ledgerQuery: true
         eventSource: false
       peer0.mhrd.certification-network.com:
-        endorsingPeer: false
-        chaincodeQuery: false
+        endorsingPeer: true
+        chaincodeQuery: true
         ledgerQuery: true
-        eventSource: false
+        eventSource: true
       peer1.mhrd.certification-network.com:
         endorsingPeer: false
         chaincodeQuery: false
