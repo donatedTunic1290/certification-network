@@ -3,7 +3,7 @@ A hyperledger fabric network to demonstrate certificate creation, exchange and v
 
 ## Fabric Network
 - 3 Organizations (IIT, MHRD, UpGrad)
-- TLS Enabled
+- TLS Disabled
 - 2 Peers per org
 
 ## Chaincode Functionality
