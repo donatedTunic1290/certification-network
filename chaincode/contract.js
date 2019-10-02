@@ -2,7 +2,7 @@
 
 const {Contract} = require('fabric-contract-api');
 
-class Contract extends Contract {
+class CertnetContract extends Contract {
 	
 	constructor() {
 		// Provide a custom name to refer to this smart contract
@@ -157,4 +157,4 @@ class Contract extends Contract {
 	
 }
 
-module.exports = Contract;
+module.exports = CertnetContract;

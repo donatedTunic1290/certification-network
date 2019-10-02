@@ -29,7 +29,7 @@ async function main() {
 		
 		// Create a new student account
 		console.log('.....Verify Certificate Of Student');
-		const verificationBuffer = await certnetContract.submitTransaction('verifyCertificate', '0001', 'PGDBC', 'asdfgh');
+		const verificationBuffer = await certnetContract.submitTransaction('verifyCertificate', '0001', 'PGDBC', 'asdfg');
 		
 		// process response
 		/*console.log('.....Processing Verify Certificate Transaction Response \n\n');

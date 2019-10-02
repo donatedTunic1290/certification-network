@@ -13,13 +13,13 @@ async function getContractInstance() {
 	
 	// A wallet is where the credentials to be used for this transaction exist
 	// Credentials for user IIT_ADMIN was initially added to this wallet.
-	const wallet = new FileSystemWallet('./identity/iit');
+	const wallet = new FileSystemWallet('./identity/mhrd');
 	
 	// What is the username of this Client user accessing the network?
-	const fabricUserName = 'IIT_ADMIN';
+	const fabricUserName = 'MHRD_ADMIN';
 	
 	// Load connection profile; will be used to locate a gateway; The CCP is converted from YAML to JSON.
-	let connectionProfile = yaml.safeLoad(fs.readFileSync('./connection-profile-iit.yaml', 'utf8'));
+	let connectionProfile = yaml.safeLoad(fs.readFileSync('./connection-profile-mhrd.yaml', 'utf8'));
 	
 	// Set connection options; identity and wallet
 	let connectionOptions = {

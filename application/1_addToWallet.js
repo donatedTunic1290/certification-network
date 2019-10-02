@@ -4,8 +4,8 @@
  * This is a Node.JS module to load a user's Identity to his wallet.
  * This Identity will be used to sign transactions initiated by this user.
  * Defaults:
- *  User Name: IIT_ADMIN
- *  User Organization: IIT
+ *  User Name: MHRD_ADMIN
+ *  User Organization: MHRD
  *  User Role: Admin
  *
  */
@@ -17,7 +17,7 @@ const path = require('path'); // Support library to build filesystem paths in No
 const crypto_materials = path.resolve(__dirname, '../network/crypto-config'); // Directory where all Network artifacts are stored
 
 // A wallet is a filesystem path that stores a collection of Identities
-const wallet = new FileSystemWallet('./identity/iit');
+const wallet = new FileSystemWallet('./identity/mhrd');
 
 async function main() {
 	
@@ -25,14 +25,14 @@ async function main() {
 	try {
 		
 		// Fetch the credentials from our previously generated Crypto Materials required to create this user's identity
-		const credentialPath = path.join(crypto_materials, '/peerOrganizations/iit.certification-network.com/users/Admin@iit.certification-network.com');
-		const certificate = fs.readFileSync(path.join(credentialPath, '/msp/signcerts/Admin@iit.certification-network.com-cert.pem')).toString();
+		const credentialPath = path.join(crypto_materials, '/peerOrganizations/mhrd.certification-network.com/users/Admin@mhrd.certification-network.com');
+		const certificate = fs.readFileSync(path.join(credentialPath, '/msp/signcerts/Admin@mhrd.certification-network.com-cert.pem')).toString();
 		// IMPORTANT: Change the private key name to the key generated on your computer
-		const privatekey = fs.readFileSync(path.join(credentialPath, '/msp/keystore/910347e27c5fb2be66d9346df12a93e5b2136bf8950a9d67421c7bce0997c98f_sk')).toString();
+		const privatekey = fs.readFileSync(path.join(credentialPath, '/msp/keystore/6293f68e41e8550b43a28046a5a900b390e4cda3e452d3426e8562459a59cfb3_sk')).toString();
 		
 		// Load credentials into wallet
-		const identityLabel = 'IIT_ADMIN';
-		const identity = X509WalletMixin.createIdentity('iitMSP', certificate, privatekey);
+		const identityLabel = 'MHRD_ADMIN';
+		const identity = X509WalletMixin.createIdentity('mhrdMSP', certificate, privatekey);
 		
 		await wallet.import(identityLabel, identity);
 		
@@ -43,7 +43,7 @@ async function main() {
 }
 
 main().then(() => {
-	console.log('Added New Client Identity for Admin User in IIT\'s wallet.');
+	console.log('Added New Client Identity for Admin User in MHRD\'s wallet.');
 }).catch((e) => {
 	console.log(e);
 	console.log(e.stack);
