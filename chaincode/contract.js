@@ -6,6 +6,7 @@ const Student = require('./student.js');
 const Certificate = require('./certificate.js');
 
 const StudentList = require('./studentlist.js');
+const CertificateList = require('./certificatelist.js');
 
 class CertnetContract extends Contract {
 	
@@ -56,9 +57,7 @@ class CertnetContract extends Contract {
 			
 			// Create a new instance of student model and save it to blockchain
 			let newStudentObject = Student.createInstance(studentObject);
-			// Convert the JSON object to a buffer and send it to blockchain for storage
-			let dataBuffer = newStudentObject.toBuffer();
-			await ctx.stub.putState(studentKey, dataBuffer);
+			await studentList.addStudent(newStudentObject);
 			// Return value of new student account created to user
 			return newStudentObject;
 		}
@@ -93,21 +92,24 @@ class CertnetContract extends Contract {
 	 */
 	async issueCertificate(ctx, studentId, courseId, gradeReceived, originalHash) {
 		let msgSender = ctx.clientIdentity.getID();
-		let certificateKey = ctx.stub.createCompositeKey('org.certification-network.certnet.certificate',[courseId + '-' + studentId]);
-		let studentKey = ctx.stub.createCompositeKey('org.certification-network.certnet.student', [studentId]);
+		let certificateKey = Certificate.makeKey([courseId + '-' + studentId]);
+		let studentKey = Student.makeKey([studentId]);
+		
+		const studentList = new StudentList(ctx);
+		const certificateList = new CertificateList(ctx);
 		
 		// Fetch student with given ID from blockchain
-		let student = await ctx.stub
-				.getState(studentKey)
+		let student = await studentList
+				.getStudent(studentKey)
 				.catch(err => console.log(err));
 		
 		// Fetch certificate with given ID from blockchain
-		let certificate = await ctx.stub
-				.getState(certificateKey)
+		let certificate = await certificateList
+				.getCertificate(certificateKey)
 				.catch(err => console.log(err));
 		
 		// Make sure that student already exists and certificate with given ID does not exist.
-		if (student.length === 0 || certificate.length !== 0) {
+		if (student === undefined || certificate !== undefined) {
 			throw new Error('Invalid Student ID: ' + studentId + ' or Course ID: ' + courseId + '. Either student does not exist or certificate already exists.');
 		} else {
 			let certificateObject = {
@@ -122,9 +124,7 @@ class CertnetContract extends Contract {
 			};
 			// Create a new instance of certificate model and save it to blockchain
 			let newCertificateObject = Certificate.createInstance(certificateObject);
-			// Convert the JSON object to a buffer and send it to blockchain for storage
-			let dataBuffer = newCertificateObject.toBuffer();
-			await ctx.stub.putState(certificateKey, dataBuffer);
+			await certificateList.addCertificate(newCertificateObject);
 			// Return value of new certificate issued to student
 			return newCertificateObject;
 		}
@@ -140,15 +140,14 @@ class CertnetContract extends Contract {
 	 */
 	async verifyCertificate(ctx, studentId, courseId, currentHash) {
 		let verifier = ctx.clientIdentity.getID();
-		let certificateKey = ctx.stub.createCompositeKey('org.certification-network.certnet.certificate', [courseId + '-' + studentId]);
+		let certificateKey = Certificate.makeKey([courseId + '-' + studentId]);
+		
+		const certificateList = new CertificateList(ctx);
 		
 		// Fetch certificate with given ID from blockchain
-		let certificateBuffer = await ctx.stub
-				.getState(certificateKey)
+		let certificate = await certificateList
+				.getCertificate(certificateKey)
 				.catch(err => console.log(err));
-		
-		// Convert the received certificate buffer to a JSON object
-		const certificate = JSON.parse(certificateBuffer.toString());
 		
 		// Check if original certificate hash matches the current hash provided for certificate
 		if (certificate === undefined || certificate.originalHash !== currentHash) {

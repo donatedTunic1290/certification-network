@@ -36,6 +36,15 @@ class Certificate {
 	}
 	
 	/**
+	 * Create a key string joined from different key parts
+	 * @param keyParts {Array}
+	 * @returns {*}
+	 */
+	static makeKey(keyParts) {
+		return keyParts.map(part => JSON.stringify(part)).join(":");
+	}
+	
+	/**
 	 * Create a new instance of this model
 	 * @returns {Certificate}
 	 * @param certificateObject {Object}
