@@ -12,8 +12,7 @@ A hyperledger fabric network to demonstrate certificate creation, exchange and v
 - Verify certificate
 
 ## Advanced Chaincode Step
-- Create a new certificate model
-- Use that model in contract definition
+- Create Student List
 
 ## Network Setup
 
