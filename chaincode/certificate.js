@@ -7,6 +7,7 @@ class Certificate {
 	 * @param certificateObject
 	 */
 	constructor(certificateObject) {
+		this.key = Certificate.makeKey([certificateObject.certId]);
 		Object.assign(this, certificateObject);
 	}
 	
@@ -42,6 +43,14 @@ class Certificate {
 	 */
 	static makeKey(keyParts) {
 		return keyParts.map(part => JSON.stringify(part)).join(":");
+	}
+	
+	/**
+	 * Return key parts for instance of this model
+	 * @returns {Array}
+	 */
+	getKeyArray() {
+		return this.key.split(":");
 	}
 	
 	/**

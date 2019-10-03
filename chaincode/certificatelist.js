@@ -15,7 +15,7 @@ class CertificateList {
 	 * @returns {Promise<Certificate>}
 	 */
 	async getCertificate(certificateKey) {
-		let certificateCompositeKey = this.ctx.stub.createCompositeKey(this.name, key.split(':'));
+		let certificateCompositeKey = this.ctx.stub.createCompositeKey(this.name, certificateKey.split(':'));
 		let certificateBuffer = await this.ctx.stub.getState(certificateCompositeKey);
 		return Certificate.fromBuffer(certificateBuffer);
 	}
@@ -26,7 +26,7 @@ class CertificateList {
 	 * @returns {Promise<void>}
 	 */
 	async addCertificate(certificateObject) {
-		let certificateCompositeKey = this.ctx.stub.createCompositeKey(this.name, key.split(':'));
+		let certificateCompositeKey = this.ctx.stub.createCompositeKey(this.name, certificateObject.getKeyArray());
 		let certificateBuffer = certificateObject.toBuffer();
 		await this.ctx.stub.putState(certificateCompositeKey, certificateBuffer);
 	}
