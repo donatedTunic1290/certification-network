@@ -37,7 +37,7 @@ class CertificateList {
 	 * @returns {Promise<void>}
 	 */
 	async updateCertificate(certificateObject) {
-		let certificateCompositeKey = this.ctx.stub.createCompositeKey(this.name, key.split(':'));
+		let certificateCompositeKey = this.ctx.stub.createCompositeKey(this.name, certificateObject.getKeyArray());
 		let certificateBuffer = certificateObject.toBuffer();
 		await this.ctx.stub.putState(certificateCompositeKey, certificateBuffer);
 	}
