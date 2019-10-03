@@ -56,9 +56,7 @@ class CertnetContract extends Contract {
 			
 			// Create a new instance of student model and save it to blockchain
 			let newStudentObject = Student.createInstance(studentObject);
-			// Convert the JSON object to a buffer and send it to blockchain for storage
-			let dataBuffer = newStudentObject.toBuffer();
-			await ctx.stub.putState(studentKey, dataBuffer);
+			await studentList.addStudent(newStudentObject);
 			// Return value of new student account created to user
 			return newStudentObject;
 		}

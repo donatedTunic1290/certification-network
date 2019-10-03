@@ -15,7 +15,7 @@ class StudentList {
 	 * @returns {Promise<Student>}
 	 */
 	async getStudent(studentKey) {
-		let studentCompositeKey = this.ctx.stub.createCompositeKey(this.name, key.split(':'));
+		let studentCompositeKey = this.ctx.stub.createCompositeKey(this.name, studentKey.split(':'));
 		let studentBuffer = await this.ctx.stub.getState(studentCompositeKey);
 		return Student.fromBuffer(studentBuffer);
 	}
@@ -26,7 +26,7 @@ class StudentList {
 	 * @returns {Promise<void>}
 	 */
 	async addStudent(studentObject) {
-		let studentCompositeKey = this.ctx.stub.createCompositeKey(this.name, key.split(':'));
+		let studentCompositeKey = this.ctx.stub.createCompositeKey(this.name, stu.split(':'));
 		let studentBuffer = studentObject.toBuffer();
 		await this.ctx.stub.putState(studentCompositeKey, studentBuffer);
 	}
