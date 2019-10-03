@@ -7,6 +7,7 @@ class Student {
 	 * @param studentObject {Object}
 	 */
 	constructor(studentObject) {
+		this.key = Student.makeKey([studentObject.studentId]);
 		Object.assign(this, studentObject);
 	}
 	
@@ -42,6 +43,14 @@ class Student {
 	 */
 	static makeKey(keyParts) {
 		return keyParts.map(part => JSON.stringify(part)).join(":");
+	}
+	
+	/**
+	 * Create an array of key parts for this model instance
+	 * @returns {Array}
+	 */
+	getKeyArray() {
+		return this.key.split(":");
 	}
 	
 	/**
