@@ -1,13 +1,13 @@
 'use strict';
 
-class Student {
+class Certificate {
 	
 	/**
 	 * Constructor function
-	 * @param studentObject {Object}
+	 * @param certificateObject
 	 */
-	constructor(studentObject) {
-		Object.assign(this, studentObject);
+	constructor(certificateObject) {
+		Object.assign(this, certificateObject);
 	}
 	
 	/**
@@ -15,7 +15,7 @@ class Student {
 	 * @returns {string}
 	 */
 	static getClass() {
-		return 'org.certification-network.certnet.models.student';
+		return 'org.certification-network.certnet.models.certificate';
 	}
 	
 	/**
@@ -24,7 +24,7 @@ class Student {
 	 */
 	static fromBuffer(buffer) {
 		let json = JSON.parse(buffer.toString());
-		return new Student(json);
+		return new Certificate(json);
 	}
 	
 	/**
@@ -37,13 +37,13 @@ class Student {
 	
 	/**
 	 * Create a new instance of this model
-	 * @returns {Student}
-	 * @param studentObject {Object}
+	 * @returns {Certificate}
+	 * @param certificateObject {Object}
 	 */
-	static createInstance(studentObject) {
-		return new Student(studentObject);
+	static createInstance(certificateObject) {
+		return new Certificate(certificateObject);
 	}
 	
 }
 
-module.exports = Student;
+module.exports = Certificate;

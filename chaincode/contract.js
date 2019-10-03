@@ -3,6 +3,7 @@
 const {Contract} = require('fabric-contract-api');
 
 const Student = require('./student.js');
+const Certificate = require('./certificate.js');
 
 class CertnetContract extends Contract {
 	
@@ -115,11 +116,13 @@ class CertnetContract extends Contract {
 				createdAt: new Date(),
 				updatedAt: new Date(),
 			};
+			// Create a new instance of certificate model and save it to blockchain
+			let newCertificateObject = Certificate.createInstance(certificateObject);
 			// Convert the JSON object to a buffer and send it to blockchain for storage
-			let dataBuffer = Buffer.from(JSON.stringify(certificateObject));
+			let dataBuffer = newCertificateObject.toBuffer();
 			await ctx.stub.putState(certificateKey, dataBuffer);
 			// Return value of new certificate issued to student
-			return certificateObject;
+			return newCertificateObject;
 		}
 	}
 	
