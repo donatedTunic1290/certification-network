@@ -36,15 +36,6 @@ class Student {
 	}
 	
 	/**
-	 * Create a composite key from provided key parts
-	 * @param keyParts
-	 * @returns {*}
-	 */
-	static makeKey(keyParts) {
-		return keyParts.map(part => JSON.stringify(part)).join(":");
-	}
-	
-	/**
 	 * Create a new instance of this model
 	 * @returns {Student}
 	 * @param studentObject {Object}
