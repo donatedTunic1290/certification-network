@@ -182,7 +182,6 @@ class CertnetContract extends Contract {
 			return verificationResult;
 		}
 	}
-	
 }
 
 module.exports = CertnetContract;
