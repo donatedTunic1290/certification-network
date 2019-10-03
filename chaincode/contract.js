@@ -2,11 +2,11 @@
 
 const {Contract, Context} = require('fabric-contract-api');
 
-const Student = require('./student.js');
-const Certificate = require('./certificate.js');
+const Student = require('./lib/models/student.js');
+const Certificate = require('./lib/models/certificate.js');
 
-const StudentList = require('./studentlist.js');
-const CertificateList = require('./certificatelist.js');
+const StudentList = require('./lib/lists/studentlist.js');
+const CertificateList = require('./lib/lists/certificatelist.js');
 
 class CertnetContext extends Context {
 	constructor() {

@@ -1,6 +1,6 @@
 'use strict';
 
-const Student = require('./student.js');
+const Student = require('../models/student.js');
 
 class StudentList {
 	

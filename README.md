@@ -12,7 +12,7 @@ A hyperledger fabric network to demonstrate certificate creation, exchange and v
 - Verify certificate
 
 ## Advanced Chaincode Step
-- Create custom context
+- Update File Structure
 
 ## Network Setup
 

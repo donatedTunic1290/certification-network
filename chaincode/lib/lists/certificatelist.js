@@ -1,6 +1,6 @@
 'use strict';
 
-const Certificate = require('./certificate');
+const Certificate = require('../models/certificate');
 
 class CertificateList {
 	
