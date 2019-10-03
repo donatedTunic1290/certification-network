@@ -2,8 +2,6 @@
 
 const {Contract} = require('fabric-contract-api');
 
-const Student = require('./student.js');
-
 class CertnetContract extends Contract {
 	
 	constructor() {
@@ -31,33 +29,21 @@ class CertnetContract extends Contract {
 		// Create a new composite key for the new student account
 		const studentKey = ctx.stub.createCompositeKey('org.certification-network.certnet.student', [studentId]);
 		
-		// Fetch student with given ID from blockchain
-		let existingStudent = await ctx.stub
-				.getState(studentKey)
-				.catch(err => console.log('Provided studentId is unique!'));
+		// Create a student object to be stored in blockchain
+		let newStudentObject = {
+			studentId: studentId,
+			name: name,
+			email: email,
+			school: ctx.clientIdentity.getID(),
+			createdAt: new Date(),
+			updatedAt: new Date(),
+		};
 		
-		// Make sure student does not already exist.
-		if (existingStudent !== undefined) {
-			throw new Error('Invalid Student ID: ' + studentId + '. A student with this ID already exists.');
-		} else {
-			// Create a student object to be stored in blockchain
-			let studentObject = {
-				studentId: studentId,
-				name: name,
-				email: email,
-				school: ctx.clientIdentity.getID(),
-				createdAt: new Date(),
-				updatedAt: new Date(),
-			};
-			
-			// Create a new instance of student model and save it to blockchain
-			let newStudentObject = Student.createInstance(studentObject);
-			// Convert the JSON object to a buffer and send it to blockchain for storage
-			let dataBuffer = newStudentObject.toBuffer();
-			await ctx.stub.putState(studentKey, dataBuffer);
-			// Return value of new student account created to user
-			return newStudentObject;
-		}
+		// Convert the JSON object to a buffer and send it to blockchain for storage
+		let dataBuffer = Buffer.from(JSON.stringify(newStudentObject));
+		await ctx.stub.putState(studentKey, dataBuffer);
+		// Return value of new student account created to user
+		return newStudentObject;
 	}
 	
 	/**
