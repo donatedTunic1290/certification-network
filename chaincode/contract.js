@@ -5,6 +5,8 @@ const {Contract} = require('fabric-contract-api');
 const Student = require('./student.js');
 const Certificate = require('./certificate.js');
 
+const StudentList = require('./studentlist.js');
+
 class CertnetContract extends Contract {
 	
 	constructor() {
@@ -30,11 +32,12 @@ class CertnetContract extends Contract {
 	 */
 	async createStudent(ctx, studentId, name, email) {
 		// Create a new composite key for the new student account
-		const studentKey = ctx.stub.createCompositeKey('org.certification-network.certnet.student', [studentId]);
+		const studentKey = Student.makeKey([studentId]);
+		const studentList = new StudentList(ctx);
 		
 		// Fetch student with given ID from blockchain
-		let existingStudent = await ctx.stub
-				.getState(studentKey)
+		let existingStudent = await studentList
+				.getStudent(studentKey)
 				.catch(err => console.log('Provided studentId is unique!'));
 		
 		// Make sure student does not already exist.
@@ -69,13 +72,14 @@ class CertnetContract extends Contract {
 	 */
 	async getStudent(ctx, studentId) {
 		// Create the composite key required to fetch record from blockchain
-		const studentKey = ctx.stub.createCompositeKey('org.certification-network.certnet.student', [studentId]);
+		const studentKey = Student.makeKey([studentId]);
+		const studentList = new StudentList(ctx);
 		
 		// Return value of student account from blockchain
-		let studentBuffer = await ctx.stub
-				.getState(studentKey)
+		return await studentList
+				.getStudent(studentKey)
 				.catch(err => console.log(err));
-		return JSON.parse(studentBuffer.toString());
+		
 	}
 	
 	/**
