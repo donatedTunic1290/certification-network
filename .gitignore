@@ -1,6 +1,6 @@
 # Project exclude paths
 /chaincode/node_modules
-/chaincode-advanced/node_modules
+chaincode-advanced
 .gitignore
 .idea/
 network/crypto-config
