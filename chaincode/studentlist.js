@@ -26,7 +26,7 @@ class StudentList {
 	 * @returns {Promise<void>}
 	 */
 	async addStudent(studentObject) {
-		let studentCompositeKey = this.ctx.stub.createCompositeKey(this.name, stu.split(':'));
+		let studentCompositeKey = this.ctx.stub.createCompositeKey(this.name, studentObject.getKeyArray());
 		let studentBuffer = studentObject.toBuffer();
 		await this.ctx.stub.putState(studentCompositeKey, studentBuffer);
 	}

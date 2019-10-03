@@ -49,7 +49,7 @@ class Student {
 	 * Create an array of key parts for this model instance
 	 * @returns {Array}
 	 */
-	getKey() {
+	getKeyArray() {
 		return this.key.split(":");
 	}
 	
