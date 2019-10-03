@@ -12,8 +12,7 @@ A hyperledger fabric network to demonstrate certificate creation, exchange and v
 - Verify certificate
 
 ## Advanced Chaincode Step
-- Create Certificate List
-- Update Chaincode based on certificate list
+- Create custom context
 
 ## Network Setup
 

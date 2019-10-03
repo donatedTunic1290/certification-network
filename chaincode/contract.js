@@ -1,6 +1,6 @@
 'use strict';
 
-const {Contract} = require('fabric-contract-api');
+const {Contract, Context} = require('fabric-contract-api');
 
 const Student = require('./student.js');
 const Certificate = require('./certificate.js');
@@ -8,11 +8,26 @@ const Certificate = require('./certificate.js');
 const StudentList = require('./studentlist.js');
 const CertificateList = require('./certificatelist.js');
 
+class CertnetContext extends Context {
+	constructor() {
+		super();
+		// Add various model lists to the context class object
+		// this : the context instance
+		this.studentList = new StudentList(this);
+		this.certificateList = new CertificateList(this);
+	}
+}
+
 class CertnetContract extends Contract {
 	
 	constructor() {
 		// Provide a custom name to refer to this smart contract
 		super('org.certification-network.certnet');
+	}
+	
+	// Built in method used to build and return the context for this smart contract on every transaction invoke
+	createContext() {
+		return new CertnetContext();
 	}
 	
 	/* ****** All custom functions are defined below ***** */
@@ -34,10 +49,9 @@ class CertnetContract extends Contract {
 	async createStudent(ctx, studentId, name, email) {
 		// Create a new composite key for the new student account
 		const studentKey = Student.makeKey([studentId]);
-		const studentList = new StudentList(ctx);
 		
 		// Fetch student with given ID from blockchain
-		let existingStudent = await studentList
+		let existingStudent = await ctx.studentList
 				.getStudent(studentKey)
 				.catch(err => console.log('Provided studentId is unique!'));
 		
@@ -57,7 +71,7 @@ class CertnetContract extends Contract {
 			
 			// Create a new instance of student model and save it to blockchain
 			let newStudentObject = Student.createInstance(studentObject);
-			await studentList.addStudent(newStudentObject);
+			await ctx.studentList.addStudent(newStudentObject);
 			// Return value of new student account created to user
 			return newStudentObject;
 		}
@@ -72,10 +86,9 @@ class CertnetContract extends Contract {
 	async getStudent(ctx, studentId) {
 		// Create the composite key required to fetch record from blockchain
 		const studentKey = Student.makeKey([studentId]);
-		const studentList = new StudentList(ctx);
 		
 		// Return value of student account from blockchain
-		return await studentList
+		return await ctx.studentList
 				.getStudent(studentKey)
 				.catch(err => console.log(err));
 		
@@ -95,16 +108,13 @@ class CertnetContract extends Contract {
 		let certificateKey = Certificate.makeKey([courseId + '-' + studentId]);
 		let studentKey = Student.makeKey([studentId]);
 		
-		const studentList = new StudentList(ctx);
-		const certificateList = new CertificateList(ctx);
-		
 		// Fetch student with given ID from blockchain
-		let student = await studentList
+		let student = await ctx.studentList
 				.getStudent(studentKey)
 				.catch(err => console.log(err));
 		
 		// Fetch certificate with given ID from blockchain
-		let certificate = await certificateList
+		let certificate = await ctx.certificateList
 				.getCertificate(certificateKey)
 				.catch(err => console.log(err));
 		
@@ -124,7 +134,7 @@ class CertnetContract extends Contract {
 			};
 			// Create a new instance of certificate model and save it to blockchain
 			let newCertificateObject = Certificate.createInstance(certificateObject);
-			await certificateList.addCertificate(newCertificateObject);
+			await ctx.certificateList.addCertificate(newCertificateObject);
 			// Return value of new certificate issued to student
 			return newCertificateObject;
 		}
@@ -142,10 +152,8 @@ class CertnetContract extends Contract {
 		let verifier = ctx.clientIdentity.getID();
 		let certificateKey = Certificate.makeKey([courseId + '-' + studentId]);
 		
-		const certificateList = new CertificateList(ctx);
-		
 		// Fetch certificate with given ID from blockchain
-		let certificate = await certificateList
+		let certificate = await ctx.certificateList
 				.getCertificate(certificateKey)
 				.catch(err => console.log(err));
 		
