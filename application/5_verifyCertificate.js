@@ -2,15 +2,11 @@
 
 /**
  * This is a Node.JS application to Verify A Student's Certificate
- * Defaults:
- * StudentID: 0001
- * CourseID: PGDBC
- * Certificate Hash: asdfgh
  */
 
 const helper = require('./contractHelper');
 
-async function main() {
+async function main(studentId, courseId, hash) {
 	
 	try {
 		const certnetContract = await helper.getContractInstance();
@@ -29,17 +25,15 @@ async function main() {
 		
 		// Create a new student account
 		console.log('.....Verify Certificate Of Student');
-		const verificationBuffer = await certnetContract.submitTransaction('verifyCertificate', '0001', 'PGDBC', 'asdfg');
-		
+		const verificationBuffer = await certnetContract.submitTransaction('verifyCertificate', studentId, courseId, hash);
 		// process response
-		/*console.log('.....Processing Verify Certificate Transaction Response \n\n');
-		let verifyResult = JSON.parse(verificationBuffer.toString());
-		console.log(verifyResult);
-		console.log('\n\n.....Verify Certificate Transaction Complete!');*/
+
+		return JSON.parse(verificationBuffer.toString());
 		
 	} catch (error) {
 		
 		console.log(`\n\n ${error} \n\n`);
+		throw new Error(error);
 		
 	} finally {
 		
@@ -49,15 +43,4 @@ async function main() {
 	}
 }
 
-main().then(() => {
-	
-	console.log('.....API Execution Complete!');
-	
-}).catch((e) => {
-	
-	console.log('.....Transaction Exception: ');
-	console.log(e);
-	console.log(e.stack);
-	process.exit(-1);
-	
-});
+module.exports.execute = main;

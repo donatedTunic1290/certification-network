@@ -19,16 +19,15 @@ const crypto_materials = path.resolve(__dirname, '../network/crypto-config'); //
 // A wallet is a filesystem path that stores a collection of Identities
 const wallet = new FileSystemWallet('./identity/mhrd');
 
-async function main() {
+async function main(certificatePath, privateKeyPath) {
 	
 	// Main try/catch block
 	try {
 		
 		// Fetch the credentials from our previously generated Crypto Materials required to create this user's identity
-		const credentialPath = path.join(crypto_materials, '/peerOrganizations/mhrd.certification-network.com/users/Admin@mhrd.certification-network.com');
-		const certificate = fs.readFileSync(path.join(credentialPath, '/msp/signcerts/Admin@mhrd.certification-network.com-cert.pem')).toString();
+		const certificate = fs.readFileSync(certificatePath).toString();
 		// IMPORTANT: Change the private key name to the key generated on your computer
-		const privatekey = fs.readFileSync(path.join(credentialPath, '/msp/keystore/6293f68e41e8550b43a28046a5a900b390e4cda3e452d3426e8562459a59cfb3_sk')).toString();
+		const privatekey = fs.readFileSync(privateKeyPath).toString();
 		
 		// Load credentials into wallet
 		const identityLabel = 'MHRD_ADMIN';
@@ -39,13 +38,8 @@ async function main() {
 	} catch (error) {
 		console.log(`Error adding to wallet. ${error}`);
 		console.log(error.stack);
+		throw new Error(error);
 	}
 }
 
-main().then(() => {
-	console.log('Added New Client Identity for Admin User in MHRD\'s wallet.');
-}).catch((e) => {
-	console.log(e);
-	console.log(e.stack);
-	process.exit(-1);
-});
+module.exports.execute = main;

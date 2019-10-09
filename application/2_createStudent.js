@@ -2,10 +2,6 @@
 
 /**
  * This is a Node.JS application to add a new student on the network.
- * Defaults:
- * StudentID: 0001
- * Name: Aakash Bansal
- * Email: connect@aakashbansal.com
  */
 
 const fs = require('fs');
@@ -13,24 +9,27 @@ const yaml = require('js-yaml');
 const { FileSystemWallet, Gateway } = require('fabric-network');
 let gateway;
 
-async function main() {
+async function main(studentId, name, email) {
 	
 	try {
+		
 		const certnetContract = await getContractInstance();
 		
 		// Create a new student account
 		console.log('.....Create a new Student account');
-		const studentBuffer = await certnetContract.submitTransaction('createStudent', '0001', 'Aakash Bansal', 'connect@aakashbansal.com');
+		const studentBuffer = await certnetContract.submitTransaction('createStudent', studentId, name, email);
 		
 		// process response
 		console.log('.....Processing Create Student Transaction Response \n\n');
 		let newStudent = JSON.parse(studentBuffer.toString());
 		console.log(newStudent);
 		console.log('\n\n.....Create Student Transaction Complete!');
+		return newStudent;
 		
 	} catch (error) {
 		
 		console.log(`\n\n ${error} \n\n`);
+		throw new Error(error);
 		
 	} finally {
 		
@@ -80,15 +79,4 @@ async function getContractInstance() {
 	return channel.getContract('certnet', 'org.certification-network.certnet');
 }
 
-main().then(() => {
-	
-	console.log('.....API Execution Complete!');
-	
-}).catch((e) => {
-	
-	console.log('.....Transaction Exception: ');
-	console.log(e);
-	console.log(e.stack);
-	process.exit(-1);
-	
-});
+module.exports.execute = main;
