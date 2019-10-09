@@ -11,8 +11,6 @@ A hyperledger fabric network to demonstrate certificate creation, exchange and v
 - Issue a new certificate
 - Verify certificate
 
-## Advanced Chaincode Step
-- Update File Structure
 
 ## Network Setup
 

@@ -20,11 +20,11 @@ services:
       - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server
       - FABRIC_CA_SERVER_CA_NAME=ca.iit.certification-network.com
       - FABRIC_CA_SERVER_TLS_ENABLED=false
-      - FABRIC_CA_SERVER_TLS_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.iit.certification-network.com-cert.pem
-      - FABRIC_CA_SERVER_TLS_KEYFILE=/etc/hyperledger/fabric-ca-server-config/IIT_CA_PRIVATE_KEY
+      # - FABRIC_CA_SERVER_TLS_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.iit.certification-network.com-cert.pem
+      # - FABRIC_CA_SERVER_TLS_KEYFILE=/etc/hyperledger/fabric-ca-server-config/IIT_CA_PRIVATE_KEY
     ports:
       - "7054:7054"
-    command: sh -c 'fabric-ca-server start --ca.certfile /etc/hyperledger/fabric-ca-server-config/ca.iit.certification-network.com-cert.pem --ca.keyfile /etc/hyperledger/fabric-ca-server-config/IIT_CA_PRIVATE_KEY -b admin:adminpw -d'
+    command: sh -c 'fabric-ca-server start -b admin:adminpw -d' # --ca.certfile /etc/hyperledger/fabric-ca-server-config/ca.iit.certification-network.com-cert.pem --ca.keyfile /etc/hyperledger/fabric-ca-server-config/IIT_CA_PRIVATE_KEY -b admin:adminpw -d'
     volumes:
       - ./crypto-config/peerOrganizations/iit.certification-network.com/ca/:/etc/hyperledger/fabric-ca-server-config
     container_name: ca.iit.certification-network.com
@@ -37,11 +37,11 @@ services:
       - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server
       - FABRIC_CA_SERVER_CA_NAME=ca.mhrd.certification-network.com
       - FABRIC_CA_SERVER_TLS_ENABLED=false
-      - FABRIC_CA_SERVER_TLS_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.mhrd.certification-network.com-cert.pem
-      - FABRIC_CA_SERVER_TLS_KEYFILE=/etc/hyperledger/fabric-ca-server-config/MHRD_CA_PRIVATE_KEY
+      # - FABRIC_CA_SERVER_TLS_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.mhrd.certification-network.com-cert.pem
+      # - FABRIC_CA_SERVER_TLS_KEYFILE=/etc/hyperledger/fabric-ca-server-config/MHRD_CA_PRIVATE_KEY
     ports:
       - "8054:7054"
-    command: sh -c 'fabric-ca-server start --ca.certfile /etc/hyperledger/fabric-ca-server-config/ca.mhrd.certification-network.com-cert.pem --ca.keyfile /etc/hyperledger/fabric-ca-server-config/MHRD_CA_PRIVATE_KEY -b admin:adminpw -d'
+    command: sh -c 'fabric-ca-server start -b admin:adminpw -d' # --ca.certfile /etc/hyperledger/fabric-ca-server-config/ca.mhrd.certification-network.com-cert.pem --ca.keyfile /etc/hyperledger/fabric-ca-server-config/MHRD_CA_PRIVATE_KEY -b admin:adminpw -d'
     volumes:
       - ./crypto-config/peerOrganizations/mhrd.certification-network.com/ca/:/etc/hyperledger/fabric-ca-server-config
     container_name: ca.mhrd.certification-network.com
@@ -54,11 +54,11 @@ services:
       - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server
       - FABRIC_CA_SERVER_CA_NAME=ca.upgrad.certification-network.com
       - FABRIC_CA_SERVER_TLS_ENABLED=false
-      - FABRIC_CA_SERVER_TLS_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.upgrad.certification-network.com-cert.pem
-      - FABRIC_CA_SERVER_TLS_KEYFILE=/etc/hyperledger/fabric-ca-server-config/UPGRAD_CA_PRIVATE_KEY
+      # - FABRIC_CA_SERVER_TLS_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.upgrad.certification-network.com-cert.pem
+      # - FABRIC_CA_SERVER_TLS_KEYFILE=/etc/hyperledger/fabric-ca-server-config/UPGRAD_CA_PRIVATE_KEY
     ports:
       - "9054:7054"
-    command: sh -c 'fabric-ca-server start --ca.certfile /etc/hyperledger/fabric-ca-server-config/ca.upgrad.certification-network.com-cert.pem --ca.keyfile /etc/hyperledger/fabric-ca-server-config/UPGRAD_CA_PRIVATE_KEY -b admin:adminpw -d'
+    command: sh -c 'fabric-ca-server start -b admin:adminpw -d' # --ca.certfile /etc/hyperledger/fabric-ca-server-config/ca.upgrad.certification-network.com-cert.pem --ca.keyfile /etc/hyperledger/fabric-ca-server-config/UPGRAD_CA_PRIVATE_KEY -b admin:adminpw -d'
     volumes:
       - ./crypto-config/peerOrganizations/upgrad.certification-network.com/ca/:/etc/hyperledger/fabric-ca-server-config
     container_name: ca.upgrad.certification-network.com
