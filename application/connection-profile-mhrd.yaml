@@ -87,7 +87,7 @@ orderers:
     grpcOptions:
       ssl-target-name-override: orderer.certification-network.com
     tlsCACerts:
-      path: /Users/aakash/WebstormProjects/certification-network/network/crypto-config/ordererOrganizations/certification-network.com/orderers/orderer.certification-network.com/msp/tlscacerts/tlsca.certification-network.com-cert.pem
+      path: /home/upgrad/workspace/certification-network/network/crypto-config/ordererOrganizations/certification-network.com/orderers/orderer.certification-network.com/msp/tlscacerts/tlsca.certification-network.com-cert.pem
 
 peers:
   peer0.iit.certification-network.com:
@@ -96,42 +96,42 @@ peers:
       ssl-target-name-override: peer0.iit.certification-network.com
       request-timeout: 120001
     tlsCACerts:
-      path: /Users/aakash/WebstormProjects/certification-network/network/crypto-config/peerOrganizations/iit.certification-network.com/peers/peer0.iit.certification-network.com/msp/tlscacerts/tlsca.iit.certification-network.com-cert.pem
+      path: /home/upgrad/workspace/certification-network/network/crypto-config/peerOrganizations/iit.certification-network.com/peers/peer0.iit.certification-network.com/msp/tlscacerts/tlsca.iit.certification-network.com-cert.pem
   peer1.iit.certification-network.com:
     url: grpc://localhost:8051
     grpcOptions:
       ssl-target-name-override: peer1.iit.certification-network.com
       request-timeout: 120001
     tlsCACerts:
-      path: /Users/aakash/WebstormProjects/certification-network/network/crypto-config/peerOrganizations/iit.certification-network.com/peers/peer1.iit.certification-network.com/msp/tlscacerts/tlsca.iit.certification-network.com-cert.pem
+      path: /home/upgrad/workspace/certification-network/network/crypto-config/peerOrganizations/iit.certification-network.com/peers/peer1.iit.certification-network.com/msp/tlscacerts/tlsca.iit.certification-network.com-cert.pem
   peer0.mhrd.certification-network.com:
     url: grpc://localhost:9051
     grpcOptions:
       ssl-target-name-override: peer0.mhrd.certification-network.com
       request-timeout: 120001
     tlsCACerts:
-      path: /Users/aakash/WebstormProjects/certification-network/network/crypto-config/peerOrganizations/mhrd.certification-network.com/peers/peer0.mhrd.certification-network.com/msp/tlscacerts/tlsca.mhrd.certification-network.com-cert.pem
+      path: /home/upgrad/workspace/certification-network/network/crypto-config/peerOrganizations/mhrd.certification-network.com/peers/peer0.mhrd.certification-network.com/msp/tlscacerts/tlsca.mhrd.certification-network.com-cert.pem
   peer1.mhrd.certification-network.com:
     url: grpc://localhost:10051
     grpcOptions:
       ssl-target-name-override: peer1.mhrd.certification-network.com
       request-timeout: 120001
     tlsCACerts:
-      path: /Users/aakash/WebstormProjects/certification-network/network/crypto-config/peerOrganizations/mhrd.certification-network.com/peers/peer1.mhrd.certification-network.com/msp/tlscacerts/tlsca.mhrd.certification-network.com-cert.pem
+      path: /home/upgrad/workspace/certification-network/network/crypto-config/peerOrganizations/mhrd.certification-network.com/peers/peer1.mhrd.certification-network.com/msp/tlscacerts/tlsca.mhrd.certification-network.com-cert.pem
   peer0.upgrad.certification-network.com:
     url: grpc://localhost:11051
     grpcOptions:
       ssl-target-name-override: peer0.upgrad.certification-network.com
       request-timeout: 120001
     tlsCACerts:
-      path: /Users/aakash/WebstormProjects/certification-network/network/crypto-config/peerOrganizations/upgrad.certification-network.com/peers/peer0.upgrad.certification-network.com/msp/tlscacerts/tlsca.upgrad.certification-network.com-cert.pem
+      path: /home/upgrad/workspace/certification-network/network/crypto-config/peerOrganizations/upgrad.certification-network.com/peers/peer0.upgrad.certification-network.com/msp/tlscacerts/tlsca.upgrad.certification-network.com-cert.pem
   peer1.upgrad.certification-network.com:
     url: grpc://localhost:12051
     grpcOptions:
       ssl-target-name-override: peer1.upgrad.certification-network.com
       request-timeout: 120001
     tlsCACerts:
-      path: /Users/aakash/WebstormProjects/certification-network/network/crypto-config/peerOrganizations/upgrad.certification-network.com/peers/peer1.upgrad.certification-network.com/msp/tlscacerts/tlsca.upgrad.certification-network.com-cert.pem
+      path: /home/upgrad/workspace/certification-network/network/crypto-config/peerOrganizations/upgrad.certification-network.com/peers/peer1.upgrad.certification-network.com/msp/tlscacerts/tlsca.upgrad.certification-network.com-cert.pem
 
 certificateAuthorities:
   ca.iit.certification-network.com:
@@ -139,7 +139,7 @@ certificateAuthorities:
     httpOptions:
       verify: false
     tlsCACerts:
-      path: /Users/aakash/WebstormProjects/certification-network/network/crypto-config/peerOrganizations/iit.certification-network.com/ca/ca.iit.certification-network.com-cert.pem
+      path: /home/upgrad/workspace/certification-network/network/crypto-config/peerOrganizations/iit.certification-network.com/ca/ca.iit.certification-network.com-cert.pem
     registrar:
       - enrollId: admin
         enrollSecret: adminpw
@@ -149,7 +149,7 @@ certificateAuthorities:
     httpOptions:
       verify: false
     tlsCACerts:
-      path: /Users/aakash/WebstormProjects/certification-network/network/crypto-config/peerOrganizations/mhrd.certification-network.com/ca/ca.mhrd.certification-network.com-cert.pem
+      path: /home/upgrad/workspace/certification-network/network/crypto-config/peerOrganizations/mhrd.certification-network.com/ca/ca.mhrd.certification-network.com-cert.pem
     registrar:
       - enrollId: admin
         enrollSecret: adminpw
@@ -159,7 +159,7 @@ certificateAuthorities:
     httpOptions:
       verify: false
     tlsCACerts:
-      path: /Users/aakash/WebstormProjects/certification-network/network/crypto-config/peerOrganizations/upgrad.certification-network.com/ca/ca.upgrad.certification-network.com-cert.pem
+      path: /home/upgrad/workspace/certification-network/network/crypto-config/peerOrganizations/upgrad.certification-network.com/ca/ca.upgrad.certification-network.com-cert.pem
     registrar:
       - enrollId: admin
         enrollSecret: adminpw
