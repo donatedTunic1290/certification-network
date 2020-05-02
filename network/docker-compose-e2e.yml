@@ -20,11 +20,11 @@ services:
       - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server
       - FABRIC_CA_SERVER_CA_NAME=ca.iit.certification-network.com
       - FABRIC_CA_SERVER_TLS_ENABLED=false
-      - FABRIC_CA_SERVER_TLS_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.iit.certification-network.com-cert.pem
-      - FABRIC_CA_SERVER_TLS_KEYFILE=/etc/hyperledger/fabric-ca-server-config/78c2b6b36ac1ff75892245e6ed1273ee81dcf025c7d9eac10429d3dc20f63be9_sk
+      # - FABRIC_CA_SERVER_TLS_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.iit.certification-network.com-cert.pem
+      # - FABRIC_CA_SERVER_TLS_KEYFILE=/etc/hyperledger/fabric-ca-server-config/0c1fdb93c9d8b000a684859e488e94087ce4b28a0cf70dc7b637596bee6fc507_sk
     ports:
       - "7054:7054"
-    command: sh -c 'fabric-ca-server start --ca.certfile /etc/hyperledger/fabric-ca-server-config/ca.iit.certification-network.com-cert.pem --ca.keyfile /etc/hyperledger/fabric-ca-server-config/78c2b6b36ac1ff75892245e6ed1273ee81dcf025c7d9eac10429d3dc20f63be9_sk -b admin:adminpw -d'
+    command: sh -c 'fabric-ca-server start -b admin:adminpw -d' # --ca.certfile /etc/hyperledger/fabric-ca-server-config/ca.iit.certification-network.com-cert.pem --ca.keyfile /etc/hyperledger/fabric-ca-server-config/0c1fdb93c9d8b000a684859e488e94087ce4b28a0cf70dc7b637596bee6fc507_sk -b admin:adminpw -d'
     volumes:
       - ./crypto-config/peerOrganizations/iit.certification-network.com/ca/:/etc/hyperledger/fabric-ca-server-config
     container_name: ca.iit.certification-network.com
@@ -37,11 +37,11 @@ services:
       - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server
       - FABRIC_CA_SERVER_CA_NAME=ca.mhrd.certification-network.com
       - FABRIC_CA_SERVER_TLS_ENABLED=false
-      - FABRIC_CA_SERVER_TLS_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.mhrd.certification-network.com-cert.pem
-      - FABRIC_CA_SERVER_TLS_KEYFILE=/etc/hyperledger/fabric-ca-server-config/fbc09162bb3f835c6c0f09a8ee773c26412994b9331137927582579cc26db253_sk
+      # - FABRIC_CA_SERVER_TLS_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.mhrd.certification-network.com-cert.pem
+      # - FABRIC_CA_SERVER_TLS_KEYFILE=/etc/hyperledger/fabric-ca-server-config/7cc9de19c95597047e1573aeeb5b60f7680d2ab98fa1394c818f63d0a352af8e_sk
     ports:
       - "8054:7054"
-    command: sh -c 'fabric-ca-server start --ca.certfile /etc/hyperledger/fabric-ca-server-config/ca.mhrd.certification-network.com-cert.pem --ca.keyfile /etc/hyperledger/fabric-ca-server-config/fbc09162bb3f835c6c0f09a8ee773c26412994b9331137927582579cc26db253_sk -b admin:adminpw -d'
+    command: sh -c 'fabric-ca-server start -b admin:adminpw -d' # --ca.certfile /etc/hyperledger/fabric-ca-server-config/ca.mhrd.certification-network.com-cert.pem --ca.keyfile /etc/hyperledger/fabric-ca-server-config/7cc9de19c95597047e1573aeeb5b60f7680d2ab98fa1394c818f63d0a352af8e_sk -b admin:adminpw -d'
     volumes:
       - ./crypto-config/peerOrganizations/mhrd.certification-network.com/ca/:/etc/hyperledger/fabric-ca-server-config
     container_name: ca.mhrd.certification-network.com
@@ -54,11 +54,11 @@ services:
       - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server
       - FABRIC_CA_SERVER_CA_NAME=ca.upgrad.certification-network.com
       - FABRIC_CA_SERVER_TLS_ENABLED=false
-      - FABRIC_CA_SERVER_TLS_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.upgrad.certification-network.com-cert.pem
-      - FABRIC_CA_SERVER_TLS_KEYFILE=/etc/hyperledger/fabric-ca-server-config/2ee64e8e15e28b8592f9789cea58247a088537d8e107ffb35e244cfa1927e517_sk
+      # - FABRIC_CA_SERVER_TLS_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.upgrad.certification-network.com-cert.pem
+      # - FABRIC_CA_SERVER_TLS_KEYFILE=/etc/hyperledger/fabric-ca-server-config/3986bd5e80adeafe93259e7911a5aae603d8ad2ee4845281d92d6977304b4466_sk
     ports:
       - "9054:7054"
-    command: sh -c 'fabric-ca-server start --ca.certfile /etc/hyperledger/fabric-ca-server-config/ca.upgrad.certification-network.com-cert.pem --ca.keyfile /etc/hyperledger/fabric-ca-server-config/2ee64e8e15e28b8592f9789cea58247a088537d8e107ffb35e244cfa1927e517_sk -b admin:adminpw -d'
+    command: sh -c 'fabric-ca-server start -b admin:adminpw -d' # --ca.certfile /etc/hyperledger/fabric-ca-server-config/ca.upgrad.certification-network.com-cert.pem --ca.keyfile /etc/hyperledger/fabric-ca-server-config/3986bd5e80adeafe93259e7911a5aae603d8ad2ee4845281d92d6977304b4466_sk -b admin:adminpw -d'
     volumes:
       - ./crypto-config/peerOrganizations/upgrad.certification-network.com/ca/:/etc/hyperledger/fabric-ca-server-config
     container_name: ca.upgrad.certification-network.com
@@ -73,6 +73,72 @@ services:
     networks:
       - certification
 
+  couchdb.iit.peer0:
+    container_name: couchdb.iit.peer0
+    image: hyperledger/fabric-couchdb:latest
+    environment:
+      - COUCHDB_USER=admin
+      - COUCHDB_PASSWORD=adminpw
+    ports:
+      - "5984:5984"
+    networks:
+      - certification
+
+  couchdb.iit.peer1:
+    container_name: couchdb.iit.peer1
+    image: hyperledger/fabric-couchdb:latest
+    environment:
+      - COUCHDB_USER=admin
+      - COUCHDB_PASSWORD=adminpw
+    ports:
+      - "6984:5984"
+    networks:
+      - certification
+
+  couchdb.mhrd.peer0:
+    container_name: couchdb.mhrd.peer0
+    image: hyperledger/fabric-couchdb:latest
+    environment:
+      - COUCHDB_USER=admin
+      - COUCHDB_PASSWORD=adminpw
+    ports:
+      - "7984:5984"
+    networks:
+      - certification
+
+  couchdb.mhrd.peer1:
+    container_name: couchdb.mhrd.peer1
+    image: hyperledger/fabric-couchdb:latest
+    environment:
+      - COUCHDB_USER=admin
+      - COUCHDB_PASSWORD=adminpw
+    ports:
+      - "8984:5984"
+    networks:
+      - certification
+
+  couchdb.upgrad.peer0:
+    container_name: couchdb.upgrad.peer0
+    image: hyperledger/fabric-couchdb:latest
+    environment:
+      - COUCHDB_USER=admin
+      - COUCHDB_PASSWORD=adminpw
+    ports:
+      - "9984:5984"
+    networks:
+      - certification
+
+  couchdb.upgrad.peer1:
+    container_name: couchdb.upgrad.peer1
+    image: hyperledger/fabric-couchdb:latest
+    environment:
+      - COUCHDB_USER=admin
+      - COUCHDB_PASSWORD=adminpw
+    ports:
+      - "10984:5984"
+    networks:
+      - certification
+
   peer0.iit.certification-network.com:
     container_name: peer0.iit.certification-network.com
     extends:
@@ -80,6 +146,8 @@ services:
       service: peer0.iit.certification-network.com
     networks:
       - certification
+    depends_on:
+      - couchdb.iit.peer0
 
   peer1.iit.certification-network.com:
     container_name: peer1.iit.certification-network.com
@@ -88,6 +156,8 @@ services:
       service: peer1.iit.certification-network.com
     networks:
       - certification
+    depends_on:
+      - couchdb.iit.peer1
 
   peer0.mhrd.certification-network.com:
     container_name: peer0.mhrd.certification-network.com
@@ -96,6 +166,8 @@ services:
       service: peer0.mhrd.certification-network.com
     networks:
       - certification
+    depends_on:
+      - couchdb.mhrd.peer0
 
   peer1.mhrd.certification-network.com:
     container_name: peer1.mhrd.certification-network.com
@@ -104,6 +176,8 @@ services:
       service: peer1.mhrd.certification-network.com
     networks:
       - certification
+    depends_on:
+      - couchdb.mhrd.peer1
 
   peer0.upgrad.certification-network.com:
     container_name: peer0.upgrad.certification-network.com
@@ -112,6 +186,8 @@ services:
       service: peer0.upgrad.certification-network.com
     networks:
       - certification
+    depends_on:
+      - couchdb.upgrad.peer0
 
   peer1.upgrad.certification-network.com:
     container_name: peer1.upgrad.certification-network.com
@@ -120,6 +196,8 @@ services:
       service: peer1.upgrad.certification-network.com
     networks:
       - certification
+    depends_on:
+      - couchdb.upgrad.peer1
 
   cli:
     container_name: cli
@@ -152,6 +230,12 @@ services:
       - ca.mhrd.certification-network.com
       - ca.upgrad.certification-network.com
       - orderer.certification-network.com
+      - couchdb.iit.peer0
+      - couchdb.iit.peer1
+      - couchdb.mhrd.peer0
+      - couchdb.mhrd.peer1
+      - couchdb.upgrad.peer0
+      - couchdb.upgrad.peer1
       - peer0.iit.certification-network.com
       - peer1.iit.certification-network.com
       - peer0.mhrd.certification-network.com

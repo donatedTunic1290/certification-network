@@ -42,6 +42,7 @@ services:
       - CORE_PEER_GOSSIP_BOOTSTRAP=peer1.iit.certification-network.com:8051
       - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.iit.certification-network.com:7051
       - CORE_PEER_LOCALMSPID=iitMSP
+      - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb.iit.peer0:5984
     volumes:
         - /var/run/:/host/var/run/
         - ../crypto-config/peerOrganizations/iit.certification-network.com/peers/peer0.iit.certification-network.com/msp:/etc/hyperledger/fabric/msp
@@ -65,6 +66,7 @@ services:
       - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer1.iit.certification-network.com:8051
       - CORE_PEER_GOSSIP_BOOTSTRAP=peer0.iit.certification-network.com:7051
       - CORE_PEER_LOCALMSPID=iitMSP
+      - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb.iit.peer1:6984
     volumes:
         - /var/run/:/host/var/run/
         - ../crypto-config/peerOrganizations/iit.certification-network.com/peers/peer1.iit.certification-network.com/msp:/etc/hyperledger/fabric/msp
@@ -89,6 +91,7 @@ services:
       - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.mhrd.certification-network.com:9051
       - CORE_PEER_GOSSIP_BOOTSTRAP=peer1.mhrd.certification-network.com:10051
       - CORE_PEER_LOCALMSPID=mhrdMSP
+      - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb.mhrd.peer0:7984
     volumes:
         - /var/run/:/host/var/run/
         - ../crypto-config/peerOrganizations/mhrd.certification-network.com/peers/peer0.mhrd.certification-network.com/msp:/etc/hyperledger/fabric/msp
@@ -112,6 +115,7 @@ services:
       - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer1.mhrd.certification-network.com:10051
       - CORE_PEER_GOSSIP_BOOTSTRAP=peer0.mhrd.certification-network.com:9051
       - CORE_PEER_LOCALMSPID=mhrdMSP
+      - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb.mhrd.peer1:8984
     volumes:
         - /var/run/:/host/var/run/
         - ../crypto-config/peerOrganizations/mhrd.certification-network.com/peers/peer1.mhrd.certification-network.com/msp:/etc/hyperledger/fabric/msp
@@ -135,6 +139,7 @@ services:
       - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.upgrad.certification-network.com:11051
       - CORE_PEER_GOSSIP_BOOTSTRAP=peer1.upgrad.certification-network.com:12051
       - CORE_PEER_LOCALMSPID=upgradMSP
+      - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb.upgrad.peer0:9984
     volumes:
         - /var/run/:/host/var/run/
         - ../crypto-config/peerOrganizations/upgrad.certification-network.com/peers/peer0.upgrad.certification-network.com/msp:/etc/hyperledger/fabric/msp
@@ -158,6 +163,7 @@ services:
       - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer1.upgrad.certification-network.com:12051
       - CORE_PEER_GOSSIP_BOOTSTRAP=peer0.upgrad.certification-network.com:11051
       - CORE_PEER_LOCALMSPID=upgradMSP
+      - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb.upgrad.peer1:10984
     volumes:
         - /var/run/:/host/var/run/
         - ../crypto-config/peerOrganizations/upgrad.certification-network.com/peers/peer1.upgrad.certification-network.com/msp:/etc/hyperledger/fabric/msp

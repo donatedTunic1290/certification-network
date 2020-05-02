@@ -7,7 +7,7 @@ export VERBOSE=false
 # Print the usage message
 function printHelp() {
   echo "Usage: "
-  echo "  network.sh <mode> [-c <channel name>] [-t <timeout>] [-d <delay>] [-f <docker-compose-file>] [-s <dbtype>] [-l <language>] [-o <consensus-type>] [-i <imagetag>] [-v]"
+  echo "  network.sh <mode> [-c <channel name>] [-t <timeout>] [-d <delay>] [-f <docker-compose-file>] [-s <dbtype>] [-l <language>] [-o <consensus-type>] [-i <imagetag>] [-v] [-m <chaincode-mode>]"
   echo "    <mode> - one of 'up', 'down', 'restart', 'retry', 'install', 'update' or 'generate'"
   echo "      - 'up' - bring up the network with docker-compose up"
   echo "      - 'down' - clear the network with docker-compose down"
@@ -23,7 +23,8 @@ function printHelp() {
   echo "    -s <dbtype> - the database backend to use: couchdb (default)"
   echo "    -l <language> - the chaincode language: node (default)"
   echo "    -i <imagetag> - the tag to be used to launch the network (defaults to \"latest\")"
-  echo "    -v new version of updated chaincode to install on all endorsers"
+  echo "    -v - new version of updated chaincode to install on all endorsers"
+  echo "    -m <chaincode-mode> - install chaincode in basic or advanced mode (defaults to \"basic\")"
   echo "  network.sh -h (print this message)"
   echo
   echo "Typically, one would first generate the required certificates and "

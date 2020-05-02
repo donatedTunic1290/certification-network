@@ -73,6 +73,72 @@ services:
     networks:
       - certification
 
+  couchdb.iit.peer0:
+    container_name: couchdb.iit.peer0
+    image: hyperledger/fabric-couchdb:latest
+    environment:
+      - COUCHDB_USER=admin
+      - COUCHDB_PASSWORD=adminpw
+    ports:
+      - "5984:5984"
+    networks:
+      - certification
+
+  couchdb.iit.peer1:
+    container_name: couchdb.iit.peer1
+    image: hyperledger/fabric-couchdb:latest
+    environment:
+      - COUCHDB_USER=admin
+      - COUCHDB_PASSWORD=adminpw
+    ports:
+      - "6984:5984"
+    networks:
+      - certification
+
+  couchdb.mhrd.peer0:
+    container_name: couchdb.mhrd.peer0
+    image: hyperledger/fabric-couchdb:latest
+    environment:
+      - COUCHDB_USER=admin
+      - COUCHDB_PASSWORD=adminpw
+    ports:
+      - "7984:5984"
+    networks:
+      - certification
+
+  couchdb.mhrd.peer1:
+    container_name: couchdb.mhrd.peer1
+    image: hyperledger/fabric-couchdb:latest
+    environment:
+      - COUCHDB_USER=admin
+      - COUCHDB_PASSWORD=adminpw
+    ports:
+      - "8984:5984"
+    networks:
+      - certification
+
+  couchdb.upgrad.peer0:
+    container_name: couchdb.upgrad.peer0
+    image: hyperledger/fabric-couchdb:latest
+    environment:
+      - COUCHDB_USER=admin
+      - COUCHDB_PASSWORD=adminpw
+    ports:
+      - "9984:5984"
+    networks:
+      - certification
+
+  couchdb.upgrad.peer1:
+    container_name: couchdb.upgrad.peer1
+    image: hyperledger/fabric-couchdb:latest
+    environment:
+      - COUCHDB_USER=admin
+      - COUCHDB_PASSWORD=adminpw
+    ports:
+      - "10984:5984"
+    networks:
+      - certification
+
   peer0.iit.certification-network.com:
     container_name: peer0.iit.certification-network.com
     extends:
@@ -80,6 +146,8 @@ services:
       service: peer0.iit.certification-network.com
     networks:
       - certification
+    depends_on:
+      - couchdb.iit.peer0
 
   peer1.iit.certification-network.com:
     container_name: peer1.iit.certification-network.com
@@ -88,6 +156,8 @@ services:
       service: peer1.iit.certification-network.com
     networks:
       - certification
+    depends_on:
+      - couchdb.iit.peer1
 
   peer0.mhrd.certification-network.com:
     container_name: peer0.mhrd.certification-network.com
@@ -96,6 +166,8 @@ services:
       service: peer0.mhrd.certification-network.com
     networks:
       - certification
+    depends_on:
+      - couchdb.mhrd.peer0
 
   peer1.mhrd.certification-network.com:
     container_name: peer1.mhrd.certification-network.com
@@ -104,6 +176,8 @@ services:
       service: peer1.mhrd.certification-network.com
     networks:
       - certification
+    depends_on:
+      - couchdb.mhrd.peer1
 
   peer0.upgrad.certification-network.com:
     container_name: peer0.upgrad.certification-network.com
@@ -112,6 +186,8 @@ services:
       service: peer0.upgrad.certification-network.com
     networks:
       - certification
+    depends_on:
+      - couchdb.upgrad.peer0
 
   peer1.upgrad.certification-network.com:
     container_name: peer1.upgrad.certification-network.com
@@ -120,6 +196,8 @@ services:
       service: peer1.upgrad.certification-network.com
     networks:
       - certification
+    depends_on:
+      - couchdb.upgrad.peer1
 
   cli:
     container_name: cli
@@ -152,6 +230,12 @@ services:
       - ca.mhrd.certification-network.com
       - ca.upgrad.certification-network.com
       - orderer.certification-network.com
+      - couchdb.iit.peer0
+      - couchdb.iit.peer1
+      - couchdb.mhrd.peer0
+      - couchdb.mhrd.peer1
+      - couchdb.upgrad.peer0
+      - couchdb.upgrad.peer1
       - peer0.iit.certification-network.com
       - peer1.iit.certification-network.com
       - peer0.mhrd.certification-network.com

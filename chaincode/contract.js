@@ -31,6 +31,7 @@ class CertnetContract extends Contract {
 		
 		// Create a student object to be stored in blockchain
 		let newStudentObject = {
+			docType: 'student',
 			studentId: studentId,
 			name: name,
 			email: email,
@@ -64,6 +65,63 @@ class CertnetContract extends Contract {
 	}
 	
 	/**
+	 * Get a range of student's account details from the blockchain
+	 * @param ctx - The transaction context
+	 * @param studentIdStart - Starting student ID for which to fetch details
+	 * @param studentIdEnd - Ending student ID for which to fetch details
+	 * @returns
+	 */
+	async getStudentsByRange(ctx, studentIdStart, studentIdEnd) {
+		// Create the composite key required to fetch record from blockchain
+		const studentStartKey = ctx.stub.createCompositeKey('org.certification-network.certnet.student', [studentIdStart]);
+		const studentEndKey = ctx.stub.createCompositeKey('org.certification-network.certnet.student', [studentIdEnd]);
+		
+		// Return value of range of student accounts from blockchain
+		let studentResultIterator = await ctx.stub
+				.getStateByRange(studentStartKey, studentEndKey)
+				.catch(err => console.log(err));
+		return await this.iterateResults(studentResultIterator);
+	}
+	
+	/**
+	 * Get a list of student accounts linked to a school from the blockchain
+	 * @param ctx - The transaction context
+	 * @param school - School name for which student accounts need to be fetched
+	 * @returns
+	 */
+	async getStudentsBySchool(ctx, school) {
+		let query = {
+			selector: {
+				docType: 'student',
+				school: school
+			}
+		};
+		let queryString = JSON.stringify(query);
+		console.info('- getStudentsBySchool queryString:\n' + queryString);
+		let studentResultIterator = await ctx.stub
+				.getQueryResult(queryString)
+				.catch(err => console.log(err));
+		
+		return await this.iterateResults(studentResultIterator);
+	}
+	
+	/**
+	 * Get history of a key from database
+	 * @param ctx - The transaction context
+	 * @param key - Key for which history is to be fetched
+	 * @returns
+	 */
+	async getHistoryForKey(ctx, key) {
+		
+		const studentKey = ctx.stub.createCompositeKey('org.certification-network.certnet.student', [key]);
+		let historyResultIterator = await ctx.stub
+				.getHistoryForKey(studentKey)
+				.catch(err => console.log(err));
+		
+		return await this.iterateResults(historyResultIterator);
+	}
+	
+	/**
 	 * Issue a certificate to the student after completing the course
 	 * @param ctx
 	 * @param studentId
@@ -92,6 +150,7 @@ class CertnetContract extends Contract {
 			throw new Error('Invalid Student ID: ' + studentId + ' or Course ID: ' + courseId + '. Either student does not exist or certificate already exists.');
 		} else {
 			let certificateObject = {
+				docType: 'certificate',
 				studentId: studentId,
 				courseId: courseId,
 				teacher: msgSender,
@@ -152,6 +211,39 @@ class CertnetContract extends Contract {
 			};
 			ctx.stub.setEvent('verifyCertificate', Buffer.from(JSON.stringify(verificationResult)));
 			return verificationResult;
+		}
+	}
+	
+	
+	/**
+	 * Iterate through the StateQueryIterator object and return an array of all values contained in it
+	 * @param iterator
+	 * @returns {Promise<[JSON]>}
+	 * [] {Key:, Value:} [{}], {Key:, Value:} [{},{}]
+	 */
+	async iterateResults(iterator) {
+		let allResults = [];
+		while (true) {
+			let res = await iterator.next();
+			
+			if (res.value && res.value.value.toString()) {
+				let jsonRes = {};
+				console.log(res.value.value.toString());
+				jsonRes.Key = res.value.key;
+				try {
+					jsonRes.Record = JSON.parse(res.value.value.toString());
+				} catch (err) {
+					console.log(err);
+					jsonRes.Record = res.value.value.toString();
+				}
+				allResults.push(jsonRes);
+			}
+			if (res.done) {
+				console.log('end of data');
+				await iterator.close();
+				console.info(allResults);
+				return allResults;
+			}
 		}
 	}
 	
