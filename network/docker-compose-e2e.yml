@@ -15,16 +15,16 @@ networks:
 services:
 
   ca.iit.certification-network.com:
-    image: hyperledger/fabric-ca:latest
+    image: hyperledger/fabric-ca:1.4.7
     environment:
       - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server
       - FABRIC_CA_SERVER_CA_NAME=ca.iit.certification-network.com
       - FABRIC_CA_SERVER_TLS_ENABLED=false
       # - FABRIC_CA_SERVER_TLS_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.iit.certification-network.com-cert.pem
-      # - FABRIC_CA_SERVER_TLS_KEYFILE=/etc/hyperledger/fabric-ca-server-config/0c1fdb93c9d8b000a684859e488e94087ce4b28a0cf70dc7b637596bee6fc507_sk
+      # - FABRIC_CA_SERVER_TLS_KEYFILE=/etc/hyperledger/fabric-ca-server-config/priv_sk
     ports:
       - "7054:7054"
-    command: sh -c 'fabric-ca-server start -b admin:adminpw -d' # --ca.certfile /etc/hyperledger/fabric-ca-server-config/ca.iit.certification-network.com-cert.pem --ca.keyfile /etc/hyperledger/fabric-ca-server-config/0c1fdb93c9d8b000a684859e488e94087ce4b28a0cf70dc7b637596bee6fc507_sk -b admin:adminpw -d'
+    command: sh -c 'fabric-ca-server start -b admin:adminpw -d' # --ca.certfile /etc/hyperledger/fabric-ca-server-config/ca.iit.certification-network.com-cert.pem --ca.keyfile /etc/hyperledger/fabric-ca-server-config/priv_sk -b admin:adminpw -d'
     volumes:
       - ./crypto-config/peerOrganizations/iit.certification-network.com/ca/:/etc/hyperledger/fabric-ca-server-config
     container_name: ca.iit.certification-network.com
@@ -32,16 +32,16 @@ services:
       - certification
 
   ca.mhrd.certification-network.com:
-    image: hyperledger/fabric-ca:latest
+    image: hyperledger/fabric-ca:1.4.7
     environment:
       - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server
       - FABRIC_CA_SERVER_CA_NAME=ca.mhrd.certification-network.com
       - FABRIC_CA_SERVER_TLS_ENABLED=false
       # - FABRIC_CA_SERVER_TLS_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.mhrd.certification-network.com-cert.pem
-      # - FABRIC_CA_SERVER_TLS_KEYFILE=/etc/hyperledger/fabric-ca-server-config/7cc9de19c95597047e1573aeeb5b60f7680d2ab98fa1394c818f63d0a352af8e_sk
+      # - FABRIC_CA_SERVER_TLS_KEYFILE=/etc/hyperledger/fabric-ca-server-config/priv_sk
     ports:
       - "8054:7054"
-    command: sh -c 'fabric-ca-server start -b admin:adminpw -d' # --ca.certfile /etc/hyperledger/fabric-ca-server-config/ca.mhrd.certification-network.com-cert.pem --ca.keyfile /etc/hyperledger/fabric-ca-server-config/7cc9de19c95597047e1573aeeb5b60f7680d2ab98fa1394c818f63d0a352af8e_sk -b admin:adminpw -d'
+    command: sh -c 'fabric-ca-server start -b admin:adminpw -d' # --ca.certfile /etc/hyperledger/fabric-ca-server-config/ca.mhrd.certification-network.com-cert.pem --ca.keyfile /etc/hyperledger/fabric-ca-server-config/priv_sk -b admin:adminpw -d'
     volumes:
       - ./crypto-config/peerOrganizations/mhrd.certification-network.com/ca/:/etc/hyperledger/fabric-ca-server-config
     container_name: ca.mhrd.certification-network.com
@@ -49,16 +49,16 @@ services:
       - certification
 
   ca.upgrad.certification-network.com:
-    image: hyperledger/fabric-ca:latest
+    image: hyperledger/fabric-ca:1.4.7
     environment:
       - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server
       - FABRIC_CA_SERVER_CA_NAME=ca.upgrad.certification-network.com
       - FABRIC_CA_SERVER_TLS_ENABLED=false
       # - FABRIC_CA_SERVER_TLS_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.upgrad.certification-network.com-cert.pem
-      # - FABRIC_CA_SERVER_TLS_KEYFILE=/etc/hyperledger/fabric-ca-server-config/3986bd5e80adeafe93259e7911a5aae603d8ad2ee4845281d92d6977304b4466_sk
+      # - FABRIC_CA_SERVER_TLS_KEYFILE=/etc/hyperledger/fabric-ca-server-config/priv_sk
     ports:
       - "9054:7054"
-    command: sh -c 'fabric-ca-server start -b admin:adminpw -d' # --ca.certfile /etc/hyperledger/fabric-ca-server-config/ca.upgrad.certification-network.com-cert.pem --ca.keyfile /etc/hyperledger/fabric-ca-server-config/3986bd5e80adeafe93259e7911a5aae603d8ad2ee4845281d92d6977304b4466_sk -b admin:adminpw -d'
+    command: sh -c 'fabric-ca-server start -b admin:adminpw -d' # --ca.certfile /etc/hyperledger/fabric-ca-server-config/ca.upgrad.certification-network.com-cert.pem --ca.keyfile /etc/hyperledger/fabric-ca-server-config/priv_sk -b admin:adminpw -d'
     volumes:
       - ./crypto-config/peerOrganizations/upgrad.certification-network.com/ca/:/etc/hyperledger/fabric-ca-server-config
     container_name: ca.upgrad.certification-network.com
@@ -75,7 +75,7 @@ services:
 
   couchdb.iit.peer0:
     container_name: couchdb.iit.peer0
-    image: hyperledger/fabric-couchdb:latest
+    image: hyperledger/fabric-couchdb:0.4.20
     environment:
       - COUCHDB_USER=admin
       - COUCHDB_PASSWORD=adminpw
@@ -86,7 +86,7 @@ services:
 
   couchdb.iit.peer1:
     container_name: couchdb.iit.peer1
-    image: hyperledger/fabric-couchdb:latest
+    image: hyperledger/fabric-couchdb:0.4.20
     environment:
       - COUCHDB_USER=admin
       - COUCHDB_PASSWORD=adminpw
@@ -97,7 +97,7 @@ services:
 
   couchdb.mhrd.peer0:
     container_name: couchdb.mhrd.peer0
-    image: hyperledger/fabric-couchdb:latest
+    image: hyperledger/fabric-couchdb:0.4.20
     environment:
       - COUCHDB_USER=admin
       - COUCHDB_PASSWORD=adminpw
@@ -108,7 +108,7 @@ services:
 
   couchdb.mhrd.peer1:
     container_name: couchdb.mhrd.peer1
-    image: hyperledger/fabric-couchdb:latest
+    image: hyperledger/fabric-couchdb:0.4.20
     environment:
       - COUCHDB_USER=admin
       - COUCHDB_PASSWORD=adminpw
@@ -119,7 +119,7 @@ services:
 
   couchdb.upgrad.peer0:
     container_name: couchdb.upgrad.peer0
-    image: hyperledger/fabric-couchdb:latest
+    image: hyperledger/fabric-couchdb:0.4.20
     environment:
       - COUCHDB_USER=admin
       - COUCHDB_PASSWORD=adminpw
@@ -130,7 +130,7 @@ services:
 
   couchdb.upgrad.peer1:
     container_name: couchdb.upgrad.peer1
-    image: hyperledger/fabric-couchdb:latest
+    image: hyperledger/fabric-couchdb:0.4.20
     environment:
       - COUCHDB_USER=admin
       - COUCHDB_PASSWORD=adminpw
@@ -201,7 +201,7 @@ services:
 
   cli:
     container_name: cli
-    image: hyperledger/fabric-tools:latest
+    image: hyperledger/fabric-tools:$IMAGETAG
     tty: true
     stdin_open: true
     environment:
@@ -250,9 +250,8 @@ services:
     image: hyperledger/fabric-ccenv:latest
     tty: true
     environment:
-      - GOPATH=/opt/gopath
       - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
-      - FABRIC_LOGGING_SPEC=INFO
+      - FABRIC_LOGGING_SPEC=DEBUG
       - CORE_PEER_ID=chaincode
       - CORE_PEER_ADDRESS=peer0.iit.certification-network.com:7051
       - CORE_PEER_LOCALMSPID=iitMSP

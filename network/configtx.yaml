@@ -13,6 +13,8 @@ Organizations:
       Admins:
         Type: Signature
         Rule: "OR('OrdererMSP.member')"
+    OrdererEndpoints:
+      - orderer.certification-network.com:7050
 
   - &iit
     Name: iitMSP
@@ -26,6 +28,9 @@ Organizations:
         Type: Signature
         Rule: "OR('iitMSP.admin', 'iitMSP.peer', 'iitMSP.client')"
       Admins:
+        Type: Signature
+        Rule: "OR('iitMSP.admin', 'iitMSP.peer', 'iitMSP.client')"
+      Endorsement:
         Type: Signature
         Rule: "OR('iitMSP.admin', 'iitMSP.peer', 'iitMSP.client')"
     AnchorPeers:
@@ -46,6 +51,9 @@ Organizations:
       Admins:
         Type: Signature
         Rule: "OR('mhrdMSP.admin', 'mhrdMSP.peer', 'mhrdMSP.client')"
+      Endorsement:
+        Type: Signature
+        Rule: "OR('mhrdMSP.admin', 'mhrdMSP.peer', 'mhrdMSP.client')"
     AnchorPeers:
       - Host: peer0.mhrd.certification-network.com
         Port: 9051
@@ -64,6 +72,9 @@ Organizations:
       Admins:
         Type: Signature
         Rule: "OR('upgradMSP.admin', 'upgradMSP.peer', 'upgradMSP.client')"
+      Endorsement:
+        Type: Signature
+        Rule: "OR('upgradMSP.admin', 'upgradMSP.peer', 'upgradMSP.client')"
     AnchorPeers:
       - Host: peer0.upgrad.certification-network.com
         Port: 11051
@@ -74,23 +85,17 @@ Organizations:
 
 Capabilities:
   Channel: &ChannelCapabilities
-    V1_4_3: true
-    V1_3: false
-    V1_1: false
+    V2_0: true
   Orderer: &OrdererCapabilities
-    V1_4_2: true
-    V1_1: false
+    V2_0: true
   Application: &ApplicationCapabilities
-    V1_4_2: true
-    V1_3: false
-    V1_2: false
-    V1_1: false
+    V2_0: true
 
 #Application
 
 Application: &ApplicationDefaults
   Organizations:
-  Policies: &ApplicationDefaultPolicies
+  Policies:
     Readers:
       Type: ImplicitMeta
       Rule: "ANY Readers"
@@ -100,7 +105,14 @@ Application: &ApplicationDefaults
     Admins:
       Type: ImplicitMeta
       Rule: "ANY Admins"
-  Capabilities: *ApplicationCapabilities
+    LifecycleEndorsement:
+      Type: ImplicitMeta
+      Rule: "ANY Endorsement"
+    Endorsement:
+      Type: ImplicitMeta
+      Rule: "ANY Endorsement"
+  Capabilities:
+    <<: *ApplicationCapabilities
 
 #Orderer
 Orderer: &OrdererDefaults
@@ -113,7 +125,6 @@ Orderer: &OrdererDefaults
     AbsoluteMaxBytes: 99 MB
     PreferredMaxBytes: 512 KB
   Organizations:
-  Capabilities: *OrdererCapabilities
   Policies:
     Readers:
       Type: ImplicitMeta
@@ -124,8 +135,6 @@ Orderer: &OrdererDefaults
     Admins:
       Type: ImplicitMeta
       Rule: "ANY Admins"
-    # BlockValidation specifies what signatures must be included in the block
-    # from the orderer for the peer to validate it.
     BlockValidation:
       Type: ImplicitMeta
       Rule: "ANY Writers"
@@ -160,6 +169,10 @@ Profiles:
         - *OrdererOrg
       Capabilities:
         <<: *OrdererCapabilities
+    Application:
+      <<: *ApplicationDefaults
+      Organizations:
+        - <<: *OrdererOrg
     Consortiums:
       CertificationConsortium:
         Organizations:
@@ -169,6 +182,7 @@ Profiles:
 
   CertificationChannel:
     Consortium: CertificationConsortium
+    <<: *ChannelDefaults
     Application:
       <<: *ApplicationDefaults
       Organizations:

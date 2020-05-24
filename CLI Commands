@@ -1,5 +1,10 @@
 # Network Setup
 
+## Requirements:
+
+Fabric Binary Version: 2.1.0
+Fabric Docker Images: 2.1.0 (1.4.7 for fabric-ca & 0.4.20 for fabric-couchdb)
+
 1. Pre-setup
 	a. Generate Crypto Materials
 		>> cryptogen generate --config=./crypto-config.yaml
@@ -64,7 +69,7 @@
 
 1. Run Chaincode in Dev Mode
 	a. SSH Into Chaincode Container
-    	>> docker exec -it chaincode /bin/bash
+    	>> docker exec -it chaincode /bin/sh
     b. Run Chaincode Node App In Dev Mode
         >> npm run start-dev
 

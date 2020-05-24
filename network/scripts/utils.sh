@@ -109,18 +109,97 @@ joinChannelWithRetry() {
   verifyResult $res "After $MAX_RETRY attempts, peer${PEER}.${ORG} has failed to join channel '$CHANNEL_NAME' "
 }
 
+# packageChaincode VERSION PEER ORG
+packageChaincode() {
+  VERSION=$1
+  PEER=$2
+  ORG=$3
+  setGlobals "$PEER" "$ORG"
+  set -x
+  peer lifecycle chaincode package certnet.tar.gz --path ${CC_SRC_PATH} --lang ${CC_RUNTIME_LANGUAGE} --label certnet_${VERSION} >&log.txt
+  res=$?
+  set +x
+  cat log.txt
+  verifyResult $res "Chaincode packaging on peer${PEER}.${ORG} has failed"
+  echo "===================== Chaincode is packaged on peer${PEER}.${ORG} ===================== "
+  echo
+}
+
 installChaincode() {
   PEER=$1
   ORG=$2
   setGlobals "$PEER" "$ORG"
-  VERSION=${3:-1.0}
   set -x
-  peer chaincode install -n certnet -v "${VERSION}" -l "${LANGUAGE}" -p "${CC_SRC_PATH}" >&log.txt
+  peer lifecycle chaincode install certnet.tar.gz >&log.txt
   res=$?
   set +x
   cat log.txt
   verifyResult $res "Chaincode installation on peer${PEER}.${ORG} has failed"
   echo "===================== Chaincode is installed on peer${PEER}.${ORG} ===================== "
+  echo
+}
+
+# queryInstalled PEER ORG
+queryInstalled() {
+  PEER=$1
+  ORG=$2
+  setGlobals "$PEER" "$ORG"
+  set -x
+  peer lifecycle chaincode queryinstalled >&log.txt
+  res=$?
+  set +x
+  cat log.txt
+  PACKAGE_ID=`sed -n '/Package/{s/^Package ID: //; s/, Label:.*$//; p;}' log.txt`
+  verifyResult $res "Query installed on peer${PEER}.org${ORG} has failed"
+  echo PackageID For Chaincode Definition is ${PACKAGE_ID}
+  echo "===================== Chaincode Package installed successfully on peer${PEER}.${ORG} ===================== "
+  echo
+}
+
+# approveForMyOrg VERSION PEER ORG
+approveForMyOrg() {
+  VERSION=$1
+  PEER=$2
+  ORG=$3
+  setGlobals "$PEER" "$ORG"
+
+  if [ -z "$CORE_PEER_TLS_ENABLED" -o "$CORE_PEER_TLS_ENABLED" = "false" ]; then
+    set -x
+    peer lifecycle chaincode approveformyorg --channelID $CHANNEL_NAME --name certnet --version ${VERSION} --init-required --package-id ${PACKAGE_ID} --sequence ${VERSION} --waitForEvent >&log.txt
+    set +x
+  else
+    set -x
+    peer lifecycle chaincode approveformyorg --tls $CORE_PEER_TLS_ENABLED --cafile $ORDERER_CA --channelID $CHANNEL_NAME --name certnet --version ${VERSION} --init-required --package-id ${PACKAGE_ID} --sequence ${VERSION} --waitForEvent >&log.txt
+    set +x
+  fi
+  cat log.txt
+  verifyResult $res "Chaincode definition approved on peer${PEER}.${ORG} on channel '$CHANNEL_NAME' failed"
+  echo "===================== Chaincode definition approved on peer${PEER}.${ORG} on channel '$CHANNEL_NAME' ===================== "
+  echo
+}
+
+# commitChaincodeDefinition VERSION PEER ORG (PEER ORG)...
+commitChaincodeDefinition() {
+  VERSION=$1
+  shift
+  parsePeerConnectionParameters $@
+  res=$?
+  verifyResult $res "Invoke transaction failed on channel '$CHANNEL_NAME' due to uneven number of peer and org parameters "
+
+  if [ -z "$CORE_PEER_TLS_ENABLED" -o "$CORE_PEER_TLS_ENABLED" = "false" ]; then
+    set -x
+    peer lifecycle chaincode commit -o orderer.certification-network.com:7050 --channelID $CHANNEL_NAME --name certnet $PEER_CONN_PARMS --version ${VERSION} --sequence ${VERSION} --init-required >&log.txt
+    res=$?
+    set +x
+  else
+    set -x
+    peer lifecycle chaincode commit -o orderer.certification-network.com:7050 --tls $CORE_PEER_TLS_ENABLED --cafile $ORDERER_CA --channelID $CHANNEL_NAME --name mycc $PEER_CONN_PARMS --version ${VERSION} --sequence ${VERSION} --init-required >&log.txt
+    res=$?
+    set +x
+  fi
+  cat log.txt
+  verifyResult $res "Chaincode definition commit failed on peer${PEER}.${ORG} on channel '$CHANNEL_NAME' failed"
+  echo "===================== Chaincode definition committed on channel '$CHANNEL_NAME' ===================== "
   echo
 }
 
@@ -225,12 +304,12 @@ chaincodeInvoke() {
   # it using the "-o" option
   if [ -z "$CORE_PEER_TLS_ENABLED" -o "$CORE_PEER_TLS_ENABLED" = "false" ]; then
     set -x
-    peer chaincode invoke -o orderer.certification-network.com:7050 -C $CHANNEL_NAME -n certnet $PEER_CONN_PARMS -c '{"Args":["org.certification-network.certnet:createStudent","0001","Aakash Bansal","connect@aakashbansal.com","15"]}' >&log.txt
+    peer chaincode invoke -o orderer.certification-network.com:7050 -C $CHANNEL_NAME -n certnet $PEER_CONN_PARMS -c '{"Args":["org.certification-network.certnet:instantiate"]}' --isInit >&log.txt
     res=$?
     set +x
   else
     set -x
-    peer chaincode invoke -o orderer.certification-network.com:7050 --tls $CORE_PEER_TLS_ENABLED --cafile $ORDERER_CA -C $CHANNEL_NAME -n certnet $PEER_CONN_PARMS -c '{"Args":["org.certification-network.certnet:createStudent","0001","Aakash Bansal","connect@aakashbansal.com"]}' >&log.txt
+    peer chaincode invoke -o orderer.certification-network.com:7050 --tls $CORE_PEER_TLS_ENABLED --cafile $ORDERER_CA -C $CHANNEL_NAME -n certnet $PEER_CONN_PARMS -c '{"Args":["org.certification-network.certnet:instantiate"]}' --isInit >&log.txt
     res=$?
     set +x
   fi
@@ -238,4 +317,33 @@ chaincodeInvoke() {
   verifyResult $res "Invoke execution on $PEERS failed "
   echo "===================== Invoke transaction successful on $PEERS on channel '$CHANNEL_NAME' ===================== "
   echo
+}
+
+# parsePeerConnectionParameters $@
+# Helper function that takes the parameters from a chaincode operation
+# (e.g. invoke, query, instantiate) and checks for an even number of
+# peers and associated org, then sets $PEER_CONN_PARMS and $PEERS
+parsePeerConnectionParameters() {
+  # check for uneven number of peer and org parameters
+  if [ $(($# % 2)) -ne 0 ]; then
+    exit 1
+  fi
+
+  PEER_CONN_PARMS=""
+  PEERS=""
+  while [ "$#" -gt 0 ]; do
+    setGlobals $1 $2
+    PEER="peer$1.$2"
+    PEERS="$PEERS $PEER"
+    PEER_CONN_PARMS="$PEER_CONN_PARMS --peerAddresses $CORE_PEER_ADDRESS"
+    if [ -z "$CORE_PEER_TLS_ENABLED" -o "$CORE_PEER_TLS_ENABLED" = "true" ]; then
+      TLSINFO=$(eval echo "--tlsRootCertFiles \$PEER$1_$2_CA")
+      PEER_CONN_PARMS="$PEER_CONN_PARMS $TLSINFO"
+    fi
+    # shift by two to get the next pair of peer/org parameters
+    shift
+    shift
+  done
+  # remove leading space for output
+  PEERS="$(echo -e "$PEERS" | sed -e 's/^[[:space:]]*//')"
 }

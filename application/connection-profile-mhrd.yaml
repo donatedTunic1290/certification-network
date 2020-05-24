@@ -28,10 +28,10 @@ channels:
       - orderer.certification-network.com
     peers:
       peer0.iit.certification-network.com:
-        endorsingPeer: false
-        chaincodeQuery: false
+        endorsingPeer: true
+        chaincodeQuery: true
         ledgerQuery: true
-        eventSource: false
+        eventSource: true
       peer1.iit.certification-network.com:
         endorsingPeer: false
         chaincodeQuery: false
@@ -48,10 +48,10 @@ channels:
         ledgerQuery: true
         eventSource: false
       peer0.upgrad.certification-network.com:
-        endorsingPeer: false
-        chaincodeQuery: false
+        endorsingPeer: true
+        chaincodeQuery: true
         ledgerQuery: true
-        eventSource: false
+        eventSource: true
       peer1.upgrad.certification-network.com:
         endorsingPeer: false
         chaincodeQuery: false

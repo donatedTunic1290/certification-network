@@ -23,6 +23,10 @@ TYPE="$5"
 LANGUAGE=`echo "$LANGUAGE" | tr [:upper:] [:lower:]`
 ORGS="iit mhrd upgrad"
 TIMEOUT=15
+COUNTER=1
+MAX_RETRY=20
+PACKAGE_ID=""
+CC_RUNTIME_LANGUAGE="node"
 
 if [ "$TYPE" = "basic" ]; then
   CC_SRC_PATH="/opt/gopath/src/github.com/hyperledger/fabric/peer/chaincode/"
@@ -35,17 +39,38 @@ echo "Channel name : "$CHANNEL_NAME
 # import utils
 . scripts/utils.sh
 
+## at first we package the chaincode on peer0 of all 3 orgs
+echo "Packaging chaincode on peer0.iit.certification-network.com ..."
+packageChaincode $VERSION 0 'iit'
+
 ## Install new version of chaincode on peer0 of all 3 orgs making them endorsers
 echo "Installing chaincode on peer0.iit.certification-network.com ..."
-installChaincode 0 'iit' $VERSION
+installChaincode 0 'iit'
 echo "Installing chaincode on peer0.mhrd.certification-network.com ..."
-installChaincode 0 'mhrd' $VERSION
+installChaincode 0 'mhrd'
 echo "Installing chaincode on peer0.upgrad.certification-network.com ..."
-installChaincode 0 'upgrad' $VERSION
+installChaincode 0 'upgrad'
 
-# Instantiate chaincode on the channel using peer0.iit
-echo "Instantiating chaincode on channel using peer0.iit.certification-network.com ..."
-instantiateChaincode 0 'iit' $VERSION
+## Query whether the chaincode is installed for IIT - peer0
+queryInstalled 0 'iit'
+## Approve the definition for IIT - peer0
+approveForMyOrg $VERSION 0 'iit'
+## Query whether the chaincode is installed for MHRD - peer0
+queryInstalled 0 'mhrd'
+## Approve the definition for MHRD - peer0
+approveForMyOrg $VERSION 0 'mhrd'
+## Query whether the chaincode is installed for UPGRAD - peer0
+queryInstalled 0 'upgrad'
+## Approve the definition for UPGRAD - peer0
+approveForMyOrg $VERSION 0 'upgrad'
+
+## now that all orgs have approved the definition, commit the definition
+echo "Committing chaincode definition on channel after getting approval from majority orgs..."
+commitChaincodeDefinition $VERSION 0 'iit' 0 'mhrd' 0 'upgrad'
+
+## Invoke chaincode first time with --isInit flag to instantiate the chaincode
+echo "Invoking chaincode with --isInit flag to instantiate the chaincode on channel..."
+chaincodeInvoke 0 'iit' 0 'mhrd' 0 'upgrad'
 
 echo
 echo "========= All GOOD, Chaincode CERTNET Is Now Installed & Instantiated On Certification Network =========== "
