@@ -270,3 +270,71 @@ services:
     networks:
       - certification
 
+
+
+
+  couchdb.iit.peer0:
+    container_name: couchdb.iit.peer0
+    image: hyperledger/fabric-couchdb:0.4.20
+    environment:
+      - COUCHDB_USER=admin
+      - COUCHDB_PASSWORD=adminpw
+    ports:
+      - "5984:5984"
+    networks:
+      - certification
+
+  couchdb.iit.peer1:
+    container_name: couchdb.iit.peer1
+    image: hyperledger/fabric-couchdb:0.4.20
+    environment:
+      - COUCHDB_USER=admin
+      - COUCHDB_PASSWORD=adminpw
+    ports:
+      - "6984:5984"
+    networks:
+      - certification
+
+  couchdb.mhrd.peer0:
+    container_name: couchdb.mhrd.peer0
+    image: hyperledger/fabric-couchdb:0.4.20
+    environment:
+      - COUCHDB_USER=admin
+      - COUCHDB_PASSWORD=adminpw
+    ports:
+      - "7984:5984"
+    networks:
+      - certification
+
+  couchdb.mhrd.peer1:
+    container_name: couchdb.mhrd.peer1
+    image: hyperledger/fabric-couchdb:0.4.20
+    environment:
+      - COUCHDB_USER=admin
+      - COUCHDB_PASSWORD=adminpw
+    ports:
+      - "8984:5984"
+    networks:
+      - certification
+
+  couchdb.upgrad.peer0:
+    container_name: couchdb.upgrad.peer0
+    image: hyperledger/fabric-couchdb:0.4.20
+    environment:
+      - COUCHDB_USER=admin
+      - COUCHDB_PASSWORD=adminpw
+    ports:
+      - "9984:5984"
+    networks:
+      - certification
+
+  couchdb.upgrad.peer1:
+    container_name: couchdb.upgrad.peer1
+    image: hyperledger/fabric-couchdb:0.4.20
+    environment:
+      - COUCHDB_USER=admin
+      - COUCHDB_PASSWORD=adminpw
+    ports:
+      - "10984:5984"
+    networks:
+      - certification
