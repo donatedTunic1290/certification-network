@@ -1,0 +1,10 @@
+PeerOrgs:
+  - Name: upgrad
+    Domain: upgrad.certification.com
+    EnableNodeOUs: true
+    Template:
+      Count: 2
+      SANS:
+        - localhost
+    Users:
+      Count: 1

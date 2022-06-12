@@ -1,0 +1,8 @@
+OrdererOrgs:
+  - Name: Orderer
+    Domain: certification.com
+    EnableNodeOUs: true
+    Specs:
+      - Hostname: orderer
+        SANS:
+          - localhost

@@ -1,0 +1,218 @@
+# Copyright IBM Corp. All Rights Reserved.
+#
+# SPDX-License-Identifier: Apache-2.0
+#
+
+Organizations:
+  - &OrdererOrg
+    Name: OrdererOrg
+    # ID to load the MSP definition as
+    ID: OrdererMSP
+    # MSPDir is the filesystem path which contains the MSP configuration
+    MSPDir: ../organizations/ordererOrganizations/certification.com/msp
+    # Policies defines the set of policies at this level of the config tree
+    # For organization policies, their canonical path is usually
+    #   /Channel/<Application|Orderer>/<OrgName>/<PolicyName>
+    Policies:
+      Readers:
+        Type: Signature
+        Rule: "OR('OrdererMSP.member')"
+      Writers:
+        Type: Signature
+        Rule: "OR('OrdererMSP.member')"
+      Admins:
+        Type: Signature
+        Rule: "OR('OrdererMSP.admin')"
+    OrdererEndpoints:
+      - orderer.certification.com:7050
+
+  - &mit
+    Name: mitMSP
+    # ID to load the MSP definition as
+    ID: mitMSP
+    MSPDir: ../organizations/peerOrganizations/mit.certification.com/msp
+    # Policies defines the set of policies at this level of the config tree
+    # For organization policies, their canonical path is usually
+    #   /Channel/<Application|Orderer>/<OrgName>/<PolicyName>
+    Policies:
+      Readers:
+        Type: Signature
+        Rule: "OR('mitMSP.admin', 'mitMSP.peer', 'mitMSP.client')"
+      Writers:
+        Type: Signature
+        Rule: "OR('mitMSP.admin', 'mitMSP.client')"
+      Admins:
+        Type: Signature
+        Rule: "OR('mitMSP.admin')"
+      Endorsement:
+        Type: Signature
+        Rule: "OR('mitMSP.peer')"
+
+  - &upgrad
+    Name: upgradMSP
+    # ID to load the MSP definition as
+    ID: upgradMSP
+    MSPDir: ../organizations/peerOrganizations/upgrad.certification.com/msp
+    # Policies defines the set of policies at this level of the config tree
+    # For organization policies, their canonical path is usually
+    #   /Channel/<Application|Orderer>/<OrgName>/<PolicyName>
+    Policies:
+      Readers:
+        Type: Signature
+        Rule: "OR('upgradMSP.admin', 'upgradMSP.peer', 'upgradMSP.client')"
+      Writers:
+        Type: Signature
+        Rule: "OR('upgradMSP.admin', 'upgradMSP.client')"
+      Admins:
+        Type: Signature
+        Rule: "OR('upgradMSP.admin')"
+      Endorsement:
+        Type: Signature
+        Rule: "OR('upgradMSP.peer')"
+
+  - &government
+    # DefaultOrg defines the organization which is used in the sampleconfig
+    # of the fabric.git development environment
+    Name: governmentMSP
+    # ID to load the MSP definition as
+    ID: governmentMSP
+    MSPDir: ../organizations/peerOrganizations/government.certification.com/msp
+    # Policies defines the set of policies at this level of the config tree
+    # For organization policies, their canonical path is usually
+    #   /Channel/<Application|Orderer>/<OrgName>/<PolicyName>
+    Policies:
+      Readers:
+        Type: Signature
+        Rule: "OR('governmentMSP.admin', 'governmentMSP.peer', 'governmentMSP.client')"
+      Writers:
+        Type: Signature
+        Rule: "OR('governmentMSP.admin', 'governmentMSP.client')"
+      Admins:
+        Type: Signature
+        Rule: "OR('governmentMSP.admin')"
+      Endorsement:
+        Type: Signature
+        Rule: "OR('governmentMSP.peer')"
+
+Capabilities:
+  Channel: &ChannelCapabilities
+    V2_0: true
+  Orderer: &OrdererCapabilities
+    V2_0: true
+  Application: &ApplicationCapabilities
+    V2_0: true
+
+
+Application: &ApplicationDefaults
+  Organizations:
+  # Policies defines the set of policies at this level of the config tree
+  # For Application policies, their canonical path is
+  #   /Channel/Application/<PolicyName>
+  Policies:
+    Readers:
+      Type: ImplicitMeta
+      Rule: "ANY Readers"
+    Writers:
+      Type: ImplicitMeta
+      Rule: "ANY Writers"
+    Admins:
+      Type: ImplicitMeta
+      Rule: "MAJORITY Admins"
+    LifecycleEndorsement:
+      Type: ImplicitMeta
+      Rule: "MAJORITY Endorsement"
+    Endorsement:
+      Type: ImplicitMeta
+      Rule: "MAJORITY Endorsement"
+  Capabilities:
+    <<: *ApplicationCapabilities
+
+
+Orderer: &OrdererDefaults
+  OrdererType: etcdraft
+  Addresses:
+    - orderer.certification.com:7050
+  EtcdRaft:
+    Consenters:
+      - Host: orderer.certification.com
+        Port: 7050
+        ClientTLSCert: ../organizations/ordererOrganizations/certification.com/orderers/orderer.certification.com/tls/server.crt
+        ServerTLSCert: ../organizations/ordererOrganizations/certification.com/orderers/orderer.certification.com/tls/server.crt
+  # Batch Timeout: The amount of time to wait before creating a batch
+  BatchTimeout: 2s
+  # Batch Size: Controls the number of messages batched into a block
+  BatchSize:
+    # Max Message Count: The maximum number of messages to permit in a batch
+    MaxMessageCount: 10
+    AbsoluteMaxBytes: 99 MB
+    PreferredMaxBytes: 512 KB
+  Organizations:
+  # Policies defines the set of policies at this level of the config tree
+  # For Orderer policies, their canonical path is
+  #   /Channel/Orderer/<PolicyName>
+  Policies:
+    Readers:
+      Type: ImplicitMeta
+      Rule: "ANY Readers"
+    Writers:
+      Type: ImplicitMeta
+      Rule: "ANY Writers"
+    Admins:
+      Type: ImplicitMeta
+      Rule: "MAJORITY Admins"
+    # BlockValidation specifies what signatures must be included in the block
+    # from the orderer for the peer to validate it.
+    BlockValidation:
+      Type: ImplicitMeta
+      Rule: "ANY Writers"
+
+
+Channel: &ChannelDefaults
+  # Policies defines the set of policies at this level of the config tree
+  # For Channel policies, their canonical path is
+  #   /Channel/<PolicyName>
+  Policies:
+    # Who may invoke the 'Deliver' API
+    Readers:
+      Type: ImplicitMeta
+      Rule: "ANY Readers"
+    # Who may invoke the 'Broadcast' API
+    Writers:
+      Type: ImplicitMeta
+      Rule: "ANY Writers"
+    # By default, who may modify elements at this config level
+    Admins:
+      Type: ImplicitMeta
+      Rule: "MAJORITY Admins"
+  Capabilities:
+    <<: *ChannelCapabilities
+
+
+Profiles:
+
+  CertificationOrdererGenesis:
+    <<: *ChannelDefaults
+    Orderer:
+      <<: *OrdererDefaults
+      Organizations:
+        - *OrdererOrg
+      Capabilities:
+        <<: *OrdererCapabilities
+    Consortiums:
+      CertificationConsortium:
+        Organizations:
+          - *mit
+          - *upgrad
+          - *government
+
+  CertificationChannel:
+    Consortium: CertificationConsortium
+    <<: *ChannelDefaults
+    Application:
+      <<: *ApplicationDefaults
+      Organizations:
+        - *mit
+        - *upgrad
+        - *government
+      Capabilities:
+        <<: *ApplicationCapabilities
