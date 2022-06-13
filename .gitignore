@@ -6,6 +6,7 @@
 bin
 config
 fabric-samples
+chaincode
 
 # User-specific stuff
 .idea/**/workspace.xml

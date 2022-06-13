@@ -16,7 +16,7 @@ volumes:
 
 networks:
   certnet:
-    name: fabric_certification
+    name: network_certnet
 
 services:
 

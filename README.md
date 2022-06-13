@@ -278,6 +278,3 @@ A hyperledger fabric network to demonstrate certificate creation, exchange and v
    1. Invoke Create Student Function
        ```console
        peer chaincode invoke -o localhost:7050 -C certnet -n demo -c '{"Args":["org.certification-network.certnet:createStudent","0001","Aakash Bansal","connect@aakashbansal.com"]}' --tls --cafile $ORDERER_CA
-   2. Invoke Get Student Function
-       ```console
-       peer chaincode invoke -o localhost:7050 -C certnet -n demo -c '{"Args":["org.certification-network.certnet:getStudent","0001"]}' --tls --cafile $ORDERER_CA
