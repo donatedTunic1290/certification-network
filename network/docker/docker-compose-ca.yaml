@@ -7,7 +7,7 @@ version: '2.1'
 
 networks:
   certnet:
-    name: fabric_certification
+    name: network_certnet
 
 services:
 
@@ -24,7 +24,7 @@ services:
       - "17054:17054"
     command: sh -c 'fabric-ca-server start -b admin:adminpw -d'
     # volumes:
-      # - ../organizations/fabric-ca/mit:/etc/hyperledger/fabric-ca-server
+    # - ../organizations/fabric-ca/mit:/etc/hyperledger/fabric-ca-server
     container_name: ca_mit
     networks:
       - certnet

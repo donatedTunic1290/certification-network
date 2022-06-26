@@ -7,6 +7,12 @@ bin
 config
 fabric-samples
 
+#fabric crypto & artifact files
+network/organizations/ordererOrganizations
+network/organizations/peerOrganizations
+network/channel-artifacts
+network/system-genesis-block
+
 # User-specific stuff
 .idea/**/workspace.xml
 .idea/**/tasks.xml

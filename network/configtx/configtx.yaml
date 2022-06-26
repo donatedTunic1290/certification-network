@@ -13,6 +13,7 @@ Organizations:
     # Policies defines the set of policies at this level of the config tree
     # For organization policies, their canonical path is usually
     #   /Channel/<Application|Orderer>/<OrgName>/<PolicyName>
+    # client, peer, orderer, admin / member
     Policies:
       Readers:
         Type: Signature
