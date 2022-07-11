@@ -105,6 +105,7 @@ A hyperledger fabric network to demonstrate certificate creation, exchange and v
    2. Join Channel for Peer0 of MIT
 
       ```console
+      export CORE_PEER_TLS_ENABLED=true
       export BLOCKFILE="./channel-artifacts/certnet.block"
       peer channel join -b $BLOCKFILE
       ```
