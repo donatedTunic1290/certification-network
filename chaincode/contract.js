@@ -115,6 +115,57 @@ class CertnetContract extends Contract {
 			return true;
 		}
 	}
+	
+	/**
+	 * Get hisory of an asset on the network based on its unique key
+	 * @param ctx Transaction context
+	 * @param doctype Type of asset being fetched
+	 * @param key Key linked to the asset
+	 * @returns {Promise<string|JSON[]>}
+	 */
+	async getAssetTxHistory(ctx, doctype, key) {
+		const userKey = ctx.stub.createCompositeKey('certnet.' + doctype, [key]);
+		const historyResultIterator = await ctx.stub
+				.getHistoryForKey(userKey)
+				.catch(err => console.log(err));
+		if (historyResultIterator) {
+			return await this.iterateResults(historyResultIterator);
+		} else {
+			return 'Asset with key ' + userKey + ' does not exist on the network';
+		}
+	}
+	
+	/**
+	 * Iterate through the StateQueryIterator object and return an array of all values contained in it
+	 * @param iterator
+	 * @returns {Promise<[JSON]>}
+	 * [] {Key:, Value:} [{}], {Key:, Value:} [{},{}] [{},{},{},{}]
+	 */
+	async iterateResults(iterator) {
+		let allResults = [];
+		while (true) {
+			let res = await iterator.next();
+			
+			if (res.value && res.value.value.toString()) {
+				let jsonRes = {};
+				console.log(res.value.value.toString());
+				jsonRes.Key = res.value.key;
+				try {
+					jsonRes.Record = JSON.parse(res.value.value.toString());
+				} catch (err) {
+					console.log(err);
+					jsonRes.Record = res.value.value.toString();
+				}
+				allResults.push(jsonRes);
+			}
+			if (res.done) {
+				console.log('end of data');
+				await iterator.close();
+				console.info(allResults);
+				return allResults;
+			}
+		}
+	}
 }
 
 module.exports = CertnetContract;
